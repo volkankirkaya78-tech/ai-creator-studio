@@ -3,56 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <title>AI Creator Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-font-family:Arial;
-margin:0;
-background:#f4f6fb;
-text-align:center;
-}
-
-.hero{
-padding:120px 20px;
-}
-
-h1{
-font-size:48px;
-}
-
-p{
-font-size:20px;
-color:#555;
-max-width:700px;
-margin:auto;
-}
-
-.btn{
-display:inline-block;
-margin-top:30px;
-padding:16px 34px;
-background:#4f46e5;
-color:white;
-text-decoration:none;
-border-radius:8px;
-font-size:18px;
-}
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f4f6fb;color:#222}
+.container{max-width:1100px;margin:auto;padding:40px}
+.hero{text-align:center;padding:90px 20px}
+.hero h1{font-size:48px;margin-bottom:15px}
+.hero p{font-size:20px;color:#555;max-width:700px;margin:auto}
+.btn{display:inline-block;margin-top:25px;padding:16px 34px;background:#4f46e5;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold}
+.section{padding:70px 20px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px}
+.card{background:white;padding:28px;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,0.06)}
+.demo{max-width:900px;margin:auto;text-align:center}
+.demo img{width:100%;border-radius:12px;margin-top:20px}
+.pricing{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+.plan{background:white;padding:30px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.05);width:260px;text-align:center}
+.price{font-size:34px;margin:15px 0}
+.footer{text-align:center;padding:40px;color:#777}
 </style>
 </head>
 
 <body>
 
-<div class="hero">
+<div class="hero container">
 
-<h1>
-Turn Any Photo Into Viral Captions
-</h1>
+<h1>Turn Any Photo Into Viral Captions</h1>
 
 <p>
-Upload your image and instantly generate viral captions, hooks and hashtags using AI.
+Upload a photo and instantly generate captions, hooks and hashtags optimized for social media.
 </p>
 
 <a class="btn" href="/index.html">Start Free</a>
+
+</div>
+
+
+<div class="section container">
+
+<h2 style="text-align:center;margin-bottom:40px;">How it works</h2>
+
+<div class="features">
+
+<div class="card">
+<h3>1. Upload Photo</h3>
+<p>Select any image from your device.</p>
+</div>
+
+<div class="card">
+<h3>2. AI Analyzes</h3>
+<p>The AI detects context, objects and mood.</p>
+</div>
+
+<div class="card">
+<h3>3. Generate Captions</h3>
+<p>Get captions, hooks and hashtags instantly.</p>
+</div>
+
+<div class="card">
+<h3>4. Go Viral</h3>
+<p>Post optimized content to your social media.</p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="section container demo">
+
+<h2>Example Output</h2>
+
+<p>This is the type of content the AI generates.</p>
+
+<img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" />
+
+<div class="card" style="margin-top:20px;text-align:left">
+
+<p><b>Caption:</b> Breakfast but make it aesthetic ☕🥐</p>
+<p><b>Hook:</b> This breakfast looks too good not to post.</p>
+<p><b>Hashtags:</b> #foodie #breakfastvibes #aestheticfood #morningmood</p>
+
+</div>
+
+</div>
+
+
+
+<div class="section container">
+
+<h2 style="text-align:center">Features</h2>
+
+<div class="features">
+
+<div class="card">
+<h3>AI Caption Generator</h3>
+<p>Generate viral captions from any image.</p>
+</div>
+
+<div class="card">
+<h3>Hook Generator</h3>
+<p>Create attention-grabbing openings.</p>
+</div>
+
+<div class="card">
+<h3>Hashtag Optimizer</h3>
+<p>Generate trending hashtags.</p>
+</div>
+
+<div class="card">
+<h3>Reel Script Generator</h3>
+<p>Turn ideas into short-form video scripts.</p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="section container">
+
+<h2 style="text-align:center">Pricing</h2>
+
+<div class="pricing">
+
+<div class="plan">
+
+<h3>Free</h3>
+
+<p class="price">$0</p>
+
+<p>1 generation per day</p>
+<p>All tools access</p>
+
+<a class="btn" href="/index.html">Start Free</a>
+
+</div>
+
+
+<div class="plan">
+
+<h3>Pro</h3>
+
+<p class="price">$12</p>
+
+<p>Unlimited generations</p>
+<p>All AI tools</p>
+
+<a class="btn" href="#" id="upgradeBtn">Upgrade</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="footer">
+
+<p>AI Creator Studio</p>
 
 </div>
 
