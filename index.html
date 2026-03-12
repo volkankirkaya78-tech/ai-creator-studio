@@ -5,21 +5,13 @@
 <meta charset="UTF-8">
 <title>AI Creator Studio</title>
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
 <style>
 
 body{
 font-family:Arial,Helvetica,sans-serif;
 margin:0;
-background:#f7f8fc;
-color:#111;
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:40px 20px;
+background:#f4f6fb;
+color:#222;
 }
 
 .hero{
@@ -29,32 +21,31 @@ padding:100px 20px;
 
 .hero h1{
 font-size:48px;
-max-width:900px;
-margin:auto;
-line-height:1.2;
+margin-bottom:20px;
 }
 
 .hero p{
 font-size:20px;
 color:#555;
-margin-top:20px;
+max-width:700px;
+margin:auto;
 }
 
 .btn{
 display:inline-block;
-padding:15px 35px;
+margin-top:30px;
+padding:14px 30px;
 background:#4f46e5;
 color:white;
 text-decoration:none;
 border-radius:8px;
 font-weight:bold;
-margin-top:30px;
 }
 
-.socialproof{
-text-align:center;
-padding:30px;
-color:#666;
+.section{
+max-width:1100px;
+margin:auto;
+padding:80px 20px;
 }
 
 .features{
@@ -67,67 +58,63 @@ margin-top:40px;
 .card{
 background:white;
 padding:25px;
-border-radius:10px;
-box-shadow:0 8px 20px rgba(0,0,0,0.05);
-}
-
-.card h3{
-margin-bottom:10px;
-}
-
-.section{
-padding:80px 0;
-}
-
-.demo{
-text-align:center;
-}
-
-.demo img{
-width:100%;
-max-width:900px;
 border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
 
 .pricing{
 display:flex;
 gap:40px;
 justify-content:center;
-margin-top:50px;
+margin-top:40px;
+flex-wrap:wrap;
 }
 
 .plan{
 background:white;
 padding:40px;
 border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.06);
-width:280px;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+width:260px;
 text-align:center;
 }
 
+.plan h2{
+margin-bottom:10px;
+}
+
 .price{
-font-size:40px;
+font-size:36px;
 margin:20px 0;
 }
 
 .faq{
 max-width:700px;
 margin:auto;
+margin-top:40px;
+line-height:1.7;
 }
 
-.faq-item{
-margin-bottom:20px;
-}
-
-footer{
+.footer{
 text-align:center;
 padding:40px;
 color:#777;
 }
 
-</style>
+@media(max-width:900px){
 
+.features{
+grid-template-columns:1fr;
+}
+
+.pricing{
+flex-direction:column;
+align-items:center;
+}
+
+}
+
+</style>
 </head>
 
 <body>
@@ -139,25 +126,17 @@ Create viral captions from any photo in seconds.
 </h1>
 
 <p>
-Upload a photo and generate captions, hooks, hashtags and reel scripts instantly with AI.
+Upload a photo and generate captions, hooks, hashtags and reel scripts instantly using AI.
 </p>
 
-<a class="btn"
-href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384">
-Start Creating
-</a>
+<a class="btn" href="#pricing">Start Creating</a>
 
 </div>
 
-<div class="socialproof">
 
-Used by creators growing on Instagram, TikTok and YouTube
+<div class="section">
 
-</div>
-
-<div class="section container">
-
-<h2 style="text-align:center">Why creators use AI Creator Studio</h2>
+<h2 style="text-align:center;">Why creators use AI Creator Studio</h2>
 
 <div class="features">
 
@@ -195,23 +174,16 @@ Used by creators growing on Instagram, TikTok and YouTube
 
 </div>
 
-<div class="section container demo">
 
-<h2>See how it works</h2>
+<div class="section" id="pricing">
 
-<img src="https://images.unsplash.com/photo-1551281044-8d8c55f3f7c1">
-
-</div>
-
-<div class="section container">
-
-<h2 style="text-align:center">Simple pricing</h2>
+<h2 style="text-align:center;">Simple pricing</h2>
 
 <div class="pricing">
 
 <div class="plan">
 
-<h3>Free</h3>
+<h2>Free</h2>
 
 <div class="price">$0</div>
 
@@ -220,9 +192,10 @@ Used by creators growing on Instagram, TikTok and YouTube
 
 </div>
 
+
 <div class="plan">
 
-<h3>Pro</h3>
+<h2>Pro</h2>
 
 <div class="price">$12/mo</div>
 
@@ -230,8 +203,7 @@ Used by creators growing on Instagram, TikTok and YouTube
 <p>All AI tools</p>
 <p>Future updates</p>
 
-<a class="btn"
-href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384">
+<a class="btn" href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384">
 Upgrade to Pro
 </a>
 
@@ -241,36 +213,32 @@ Upgrade to Pro
 
 </div>
 
+
 <div class="section">
 
-<h2 style="text-align:center">FAQ</h2>
+<h2 style="text-align:center;">FAQ</h2>
 
 <div class="faq">
 
-<div class="faq-item">
-<b>How does the AI work?</b>
-<p>Upload a photo and the AI analyzes the image to generate captions and hooks.</p>
-</div>
+<p><b>How does the AI work?</b><br>
+Upload a photo and the AI analyzes the image to generate captions and hooks.</p>
 
-<div class="faq-item">
-<b>Which platforms is it for?</b>
-<p>Instagram, TikTok, YouTube Shorts and any social media platform.</p>
-</div>
+<p><b>Which platforms is it for?</b><br>
+Instagram, TikTok, YouTube Shorts and any social media platform.</p>
 
-<div class="faq-item">
-<b>Can I cancel anytime?</b>
-<p>Yes, you can cancel your subscription anytime.</p>
-</div>
+<p><b>Can I cancel anytime?</b><br>
+Yes, you can cancel your subscription anytime.</p>
 
 </div>
 
 </div>
 
-<footer>
 
-AI Creator Studio
+<div class="footer">
 
-</footer>
+<p>AI Creator Studio</p>
+
+</div>
 
 </body>
 </html>
