@@ -38,6 +38,7 @@ margin-top:20px;
 margin-top:30px;
 font-size:18px;
 line-height:1.6;
+white-space:pre-line;
 }
 
 .upgrade{
@@ -65,7 +66,7 @@ border:1px solid #ddd;
 
 <p>Upload a photo and generate viral captions instantly.</p>
 
-<input type="file">
+<input type="file" id="image">
 
 <br>
 
@@ -91,11 +92,11 @@ border:1px solid #ddd;
 
 <h3>Send Feedback</h3>
 
-<textarea placeholder="Write your feedback"></textarea>
+<textarea id="feedback" placeholder="Write your feedback"></textarea>
 
 <br>
 
-<button>Send Feedback</button>
+<button onclick="sendFeedback()">Send Feedback</button>
 
 </div>
 
@@ -103,7 +104,7 @@ border:1px solid #ddd;
 
 let used=false;
 
-function generate(){
+async function generate(){
 
 if(used){
 
@@ -112,11 +113,62 @@ return;
 
 }
 
+const fileInput=document.getElementById("image");
+
+const file=fileInput.files[0];
+
+if(!file){
+
+alert("Please upload an image first");
+return;
+
+}
+
+const formData=new FormData();
+
+formData.append("image",file);
+
+document.getElementById("result").innerHTML="AI analyzing image...";
+
+try{
+
+const response=await fetch("http://localhost:3000/api/generate-caption",{
+
+method:"POST",
+body:formData
+
+});
+
+const data=await response.json();
+
+document.getElementById("result").innerHTML=data.caption;
+
 used=true;
 
-document.getElementById("result").innerHTML=
+}catch(error){
 
-"Sunsets are proof that endings can be beautiful too.<br><br>#sunset #goldenhour #travel";
+document.getElementById("result").innerHTML="AI generation failed.";
+
+}
+
+}
+
+function sendFeedback(){
+
+const text=document.getElementById("feedback").value;
+
+if(text.length<3){
+
+alert("Write something first.");
+return;
+
+}
+
+console.log("User feedback:",text);
+
+alert("Thank you for your feedback!");
+
+document.getElementById("feedback").value="";
 
 }
 
