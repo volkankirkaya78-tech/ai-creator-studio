@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -11,7 +10,7 @@
 body{
 margin:0;
 font-family:Inter,Arial;
-background:#f4f6fb;
+background:#f5f7fb;
 }
 
 .container{
@@ -30,7 +29,6 @@ padding:30px;
 
 .sidebar h2{
 margin-top:0;
-font-weight:600;
 }
 
 .menu{
@@ -39,8 +37,8 @@ margin-top:30px;
 
 .menu div{
 padding:12px;
-cursor:pointer;
 border-radius:8px;
+cursor:pointer;
 margin-bottom:10px;
 }
 
@@ -64,8 +62,21 @@ display:none;
 display:block;
 }
 
-h2{
-margin-top:0;
+/* BUTTON */
+
+button{
+background:#4f46e5;
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+margin-top:15px;
+}
+
+button:hover{
+opacity:.9;
 }
 
 /* INPUT */
@@ -76,24 +87,6 @@ border-radius:8px;
 border:1px solid #ddd;
 margin-top:10px;
 width:260px;
-font-size:14px;
-}
-
-/* BUTTON */
-
-button{
-background:#4f46e5;
-color:white;
-border:none;
-padding:12px 20px;
-border-radius:8px;
-cursor:pointer;
-margin-top:15px;
-font-size:15px;
-}
-
-button:hover{
-opacity:.9;
 }
 
 /* IMAGE */
@@ -108,12 +101,11 @@ display:none;
 /* RESULT */
 
 .result{
-margin-top:30px;
 background:white;
-padding:30px;
+padding:25px;
 border-radius:14px;
-box-shadow:0 10px 30px rgba(0,0,0,.06);
-line-height:1.7;
+margin-top:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.05);
 }
 
 /* CAPTION CARD */
@@ -131,7 +123,7 @@ align-items:center;
 .copyBtn{
 background:#111;
 padding:6px 12px;
-font-size:13px;
+font-size:12px;
 }
 
 /* TAGS */
@@ -181,7 +173,7 @@ font-style:italic;
 
 <h2>Caption Generator</h2>
 
-<p>Upload an image and generate captions, hooks and hashtags.</p>
+<p>Upload an image and generate viral captions.</p>
 
 <select id="style">
 
@@ -229,7 +221,7 @@ Generate Caption
 
 <button onclick="detectTrends()">Find Trends</button>
 
-<div class="result" id="trendResult"></div>
+<div id="trendResult"></div>
 
 </div>
 
@@ -241,7 +233,7 @@ Generate Caption
 
 <button onclick="viralIdeas()">Generate Ideas</button>
 
-<div class="result" id="viralResult"></div>
+<div id="viralResult"></div>
 
 </div>
 
@@ -257,7 +249,7 @@ Generate Caption
 
 <button onclick="calendar()">Generate Calendar</button>
 
-<div class="result" id="calendarResult"></div>
+<div id="calendarResult"></div>
 
 </div>
 
@@ -287,7 +279,7 @@ Generate Caption
 
 <button onclick="generateReel()">Generate Reel</button>
 
-<div class="result" id="reelResult"></div>
+<div id="reelResult"></div>
 
 </div>
 
@@ -317,7 +309,7 @@ Generate Caption
 
 <button onclick="analyze()">Analyze</button>
 
-<div class="result" id="competitorResult"></div>
+<div id="competitorResult"></div>
 
 </div>
 
@@ -328,8 +320,6 @@ Generate Caption
 <script>
 
 const API="https://ai-caption-server-3rxf.onrender.com"
-
-/* TOOL SWITCH */
 
 function openTool(name){
 
@@ -373,9 +363,29 @@ alert("Copied!")
 
 }
 
+/* FREE LIMIT */
+
+function checkFreeLimit(){
+
+const today=new Date().toDateString()
+const used=localStorage.getItem("freeUsedDate")
+
+if(used===today){
+
+window.location.href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384"
+return false
+
+}
+
+return true
+
+}
+
 /* CAPTION */
 
 async function generateCaption(){
+
+if(!checkFreeLimit()) return
 
 const file=document.getElementById("image").files[0]
 const style=document.getElementById("style").value
@@ -408,6 +418,8 @@ style
 })
 
 const data=await res.json()
+
+localStorage.setItem("freeUsedDate",new Date().toDateString())
 
 document.getElementById("loading").innerText=""
 
@@ -450,146 +462,6 @@ document.getElementById("captionResult").innerHTML=html
 }
 
 reader.readAsDataURL(file)
-
-}
-
-/* TREND */
-
-async function detectTrends(){
-
-const res=await fetch(API+"/trend-detector",{method:"POST"})
-const data=await res.json()
-
-let html=""
-
-data.trends.forEach(t=>{
-
-html+="<div class='result'>"
-html+="<h3>"+t.title+"</h3>"
-html+="Platform: "+t.platform+"<br><br>"
-html+="<b>Why Trending</b><br>"+t.why_trending+"<br><br>"
-html+="<b>Content Idea</b><br>"+t.content_idea+"<br><br>"
-html+="<b>Example Hook</b><br>"+t.example_hook
-html+="</div>"
-
-})
-
-document.getElementById("trendResult").innerHTML=html
-
-}
-
-/* VIRAL */
-
-async function viralIdeas(){
-
-const res=await fetch(API+"/viral-topics",{method:"POST"})
-const data=await res.json()
-
-let html=""
-
-data.viral_topics.forEach(v=>{
-
-html+="<div class='result'>"
-html+="<h3>"+v.title+"</h3>"
-html+="<b>Hook</b><br>"+v.hook+"<br><br>"
-html+="<b>Why Viral</b><br>"+v.why_viral
-html+="</div>"
-
-})
-
-document.getElementById("viralResult").innerHTML=html
-
-}
-
-/* CALENDAR */
-
-async function calendar(){
-
-const niche=document.getElementById("niche").value
-
-const res=await fetch(API+"/content-calendar",{
-
-method:"POST",
-
-headers:{ "Content-Type":"application/json" },
-
-body:JSON.stringify({niche})
-
-})
-
-const data=await res.json()
-
-let html="<div class='result'>"
-
-data.calendar.forEach(d=>{
-
-html+="Day "+d.day+" — "+d.title+"<br>"
-html+="Hook: "+d.hook+"<br><br>"
-
-})
-
-html+="</div>"
-
-document.getElementById("calendarResult").innerHTML=html
-
-}
-
-/* REEL */
-
-async function generateReel(){
-
-const topic=document.getElementById("topic").value
-const niche=document.getElementById("reelNiche").value
-const platform=document.getElementById("platform").value
-
-const res=await fetch(API+"/reel-generator",{
-
-method:"POST",
-
-headers:{ "Content-Type":"application/json" },
-
-body:JSON.stringify({topic,niche,platform})
-
-})
-
-const data=await res.json()
-
-document.getElementById("reelResult").innerHTML=
-
-"<div class='result'>"+
-"<h3>"+data.title+"</h3>"+
-"<b>Hook</b><br>"+data.hook+"<br><br>"+
-"<b>Caption</b><br>"+data.caption+
-"</div>"
-
-}
-
-/* COMPETITOR */
-
-async function analyze(){
-
-const username=document.getElementById("username").value
-const niche=document.getElementById("compNiche").value
-const platform=document.getElementById("compPlatform").value
-
-const res=await fetch(API+"/competitor-analyzer",{
-
-method:"POST",
-
-headers:{ "Content-Type":"application/json" },
-
-body:JSON.stringify({username,niche,platform})
-
-})
-
-const data=await res.json()
-
-document.getElementById("competitorResult").innerHTML=
-
-"<div class='result'>"+
-"<h3>Content Strategy</h3>"+data.content_strategy+
-"<h3>Growth Tips</h3>"+data.growth_tips+
-"</div>"
 
 }
 
