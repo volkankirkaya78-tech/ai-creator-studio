@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -9,8 +10,8 @@
 
 body{
 margin:0;
-font-family:Arial;
-background:#f4f6fb;
+font-family:Inter,Arial;
+background:#f5f7fb;
 }
 
 .container{
@@ -21,14 +22,15 @@ height:100vh;
 /* SIDEBAR */
 
 .sidebar{
-width:230px;
+width:240px;
 background:#1f2235;
 color:white;
-padding:25px;
+padding:30px;
 }
 
 .sidebar h2{
 margin-top:0;
+font-weight:600;
 }
 
 .menu{
@@ -38,19 +40,19 @@ margin-top:30px;
 .menu div{
 padding:12px;
 cursor:pointer;
-border-radius:6px;
-margin-bottom:8px;
+border-radius:8px;
+margin-bottom:10px;
 }
 
 .menu div:hover{
-background:#323657;
+background:#2e3252;
 }
 
 /* MAIN */
 
 .main{
 flex:1;
-padding:40px;
+padding:50px;
 overflow:auto;
 }
 
@@ -62,26 +64,71 @@ display:none;
 display:block;
 }
 
+h2{
+margin-top:0;
+}
+
+/* BUTTON */
+
 button{
 background:#4f46e5;
 color:white;
 border:none;
-padding:10px 18px;
+padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
 margin-top:10px;
+font-size:15px;
 }
+
+button:hover{
+opacity:.9;
+}
+
+/* INPUT */
 
 input,select{
 padding:10px;
-margin-top:10px;
 border-radius:6px;
 border:1px solid #ddd;
+margin-top:10px;
+width:260px;
 }
+
+/* RESULT */
 
 .result{
 margin-top:30px;
-line-height:1.6;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 4px 20px rgba(0,0,0,.05);
+line-height:1.7;
+}
+
+/* PREVIEW */
+
+#preview{
+margin-top:20px;
+max-width:350px;
+border-radius:10px;
+display:none;
+}
+
+/* COPY */
+
+.copy{
+background:#111;
+font-size:13px;
+padding:5px 10px;
+margin-left:10px;
+}
+
+/* LOADING */
+
+.loading{
+margin-top:20px;
+font-style:italic;
 }
 
 </style>
@@ -117,12 +164,16 @@ line-height:1.6;
 
 <h2>Caption Generator</h2>
 
+<p>Upload an image and generate captions, hooks and hashtags.</p>
+
 <select id="style">
-<option>viral</option>
-<option>funny</option>
-<option>emotional</option>
-<option>story</option>
-<option>luxury</option>
+
+<option value="viral">Viral</option>
+<option value="funny">Funny</option>
+<option value="emotional">Emotional</option>
+<option value="story">Story</option>
+<option value="luxury">Luxury</option>
+
 </select>
 
 <br>
@@ -131,7 +182,17 @@ line-height:1.6;
 
 <br>
 
-<button onclick="generateCaption()">Generate</button>
+<img id="preview">
+
+<br>
+
+<input id="email" placeholder="Enter email to generate">
+
+<br>
+
+<button onclick="generateCaption()">Generate Caption</button>
+
+<div id="loading" class="loading"></div>
 
 <div class="result" id="captionResult"></div>
 
@@ -248,8 +309,42 @@ const API="https://ai-caption-server-3rxf.onrender.com"
 function openTool(name){
 
 document.querySelectorAll(".tool").forEach(t=>t.classList.remove("active"))
-
 document.getElementById(name).classList.add("active")
+
+}
+
+/* IMAGE PREVIEW */
+
+document.getElementById("image").addEventListener("change",function(){
+
+const file=this.files[0]
+
+if(!file.type.startsWith("image/")){
+alert("Upload an image file")
+return
+}
+
+const reader=new FileReader()
+
+reader.onload=function(e){
+
+const img=document.getElementById("preview")
+
+img.src=e.target.result
+img.style.display="block"
+
+}
+
+reader.readAsDataURL(file)
+
+})
+
+/* COPY */
+
+function copy(text){
+
+navigator.clipboard.writeText(text)
+alert("Copied!")
 
 }
 
@@ -259,8 +354,16 @@ async function generateCaption(){
 
 const file=document.getElementById("image").files[0]
 const style=document.getElementById("style").value
+const email=document.getElementById("email").value
+
+if(!email){
+alert("Enter email first")
+return
+}
 
 const reader=new FileReader()
+
+document.getElementById("loading").innerText="Generating content..."
 
 reader.onload=async function(){
 
@@ -273,7 +376,7 @@ headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
 
 image:reader.result,
-style:style
+style
 
 })
 
@@ -281,9 +384,23 @@ style:style
 
 const data=await res.json()
 
-document.getElementById("captionResult").innerText=
+document.getElementById("loading").innerText=""
 
-JSON.stringify(data,null,2)
+let html=""
+
+html+="<h3>Optimized Caption</h3>"
+html+=data.optimized_caption+" <button class='copy' onclick='copy(`"+data.optimized_caption+"`)'>copy</button>"
+
+html+="<h3>Captions</h3>"
+data.captions.forEach(c=>html+=c+"<br>")
+
+html+="<h3>Hooks</h3>"
+data.hooks.forEach(h=>html+=h+"<br>")
+
+html+="<h3>Hashtags</h3>"
+html+=data.hashtags.join(" ")
+
+document.getElementById("captionResult").innerHTML=html
 
 }
 
@@ -296,12 +413,20 @@ reader.readAsDataURL(file)
 async function detectTrends(){
 
 const res=await fetch(API+"/trend-detector",{method:"POST"})
-
 const data=await res.json()
 
-document.getElementById("trendResult").innerText=
+let html=""
 
-JSON.stringify(data,null,2)
+data.trends.forEach(t=>{
+
+html+="<h3>"+t.title+"</h3>"
+html+="Platform: "+t.platform+"<br>"
+html+="<b>Why Trending</b><br>"+t.why_trending+"<br>"
+html+="<b>Content Idea</b><br>"+t.content_idea+"<br><br>"
+
+})
+
+document.getElementById("trendResult").innerHTML=html
 
 }
 
@@ -310,12 +435,19 @@ JSON.stringify(data,null,2)
 async function viralIdeas(){
 
 const res=await fetch(API+"/viral-topics",{method:"POST"})
-
 const data=await res.json()
 
-document.getElementById("viralResult").innerText=
+let html=""
 
-JSON.stringify(data,null,2)
+data.viral_topics.forEach(v=>{
+
+html+="<h3>"+v.title+"</h3>"
+html+="Hook: "+v.hook+"<br>"
+html+="Why Viral: "+v.why_viral+"<br><br>"
+
+})
+
+document.getElementById("viralResult").innerHTML=html
 
 }
 
@@ -331,15 +463,22 @@ method:"POST",
 
 headers:{ "Content-Type":"application/json" },
 
-body:JSON.stringify({ niche })
+body:JSON.stringify({niche})
 
 })
 
 const data=await res.json()
 
-document.getElementById("calendarResult").innerText=
+let html=""
 
-JSON.stringify(data,null,2)
+data.calendar.forEach(d=>{
+
+html+="Day "+d.day+" — "+d.title+"<br>"
+html+="Hook: "+d.hook+"<br><br>"
+
+})
+
+document.getElementById("calendarResult").innerHTML=html
 
 }
 
@@ -357,21 +496,17 @@ method:"POST",
 
 headers:{ "Content-Type":"application/json" },
 
-body:JSON.stringify({
-
-topic,
-niche,
-platform
-
-})
+body:JSON.stringify({topic,niche,platform})
 
 })
 
 const data=await res.json()
 
-document.getElementById("reelResult").innerText=
+document.getElementById("reelResult").innerHTML=
 
-JSON.stringify(data,null,2)
+"<h3>"+data.title+"</h3>"+
+"<b>Hook</b><br>"+data.hook+"<br><br>"+
+"<b>Caption</b><br>"+data.caption
 
 }
 
@@ -389,21 +524,17 @@ method:"POST",
 
 headers:{ "Content-Type":"application/json" },
 
-body:JSON.stringify({
-
-username,
-niche,
-platform
-
-})
+body:JSON.stringify({username,niche,platform})
 
 })
 
 const data=await res.json()
 
-document.getElementById("competitorResult").innerText=
+document.getElementById("competitorResult").innerHTML=
 
-JSON.stringify(data,null,2)
+"<h3>Content Strategy</h3>"+data.content_strategy+
+
+"<h3>Growth Tips</h3>"+data.growth_tips
 
 }
 
