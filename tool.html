@@ -114,7 +114,6 @@ return;
 }
 
 const fileInput=document.getElementById("image");
-
 const file=fileInput.files[0];
 
 if(!file){
@@ -125,19 +124,19 @@ return;
 }
 
 const formData=new FormData();
-
 formData.append("image",file);
 
 document.getElementById("result").innerHTML="AI analyzing image...";
 
 try{
 
-const response=await fetch("http://localhost:3000/api/generate-caption",{
-
+const response=await fetch(
+"https://ai-caption-server-3rxf.onrender.com/generate-caption",
+{
 method:"POST",
 body:formData
-
-});
+}
+);
 
 const data=await response.json();
 
