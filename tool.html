@@ -11,7 +11,7 @@
 body{
 margin:0;
 font-family:Inter,Arial;
-background:#f5f7fb;
+background:#f4f6fb;
 }
 
 .container{
@@ -68,6 +68,17 @@ h2{
 margin-top:0;
 }
 
+/* INPUT */
+
+input,select{
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+margin-top:10px;
+width:260px;
+font-size:14px;
+}
+
 /* BUTTON */
 
 button{
@@ -77,7 +88,7 @@ border:none;
 padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
-margin-top:10px;
+margin-top:15px;
 font-size:15px;
 }
 
@@ -85,14 +96,13 @@ button:hover{
 opacity:.9;
 }
 
-/* INPUT */
+/* IMAGE */
 
-input,select{
-padding:10px;
-border-radius:6px;
-border:1px solid #ddd;
-margin-top:10px;
-width:260px;
+#preview{
+margin-top:20px;
+max-width:380px;
+border-radius:12px;
+display:none;
 }
 
 /* RESULT */
@@ -100,28 +110,35 @@ width:260px;
 .result{
 margin-top:30px;
 background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 4px 20px rgba(0,0,0,.05);
+padding:30px;
+border-radius:14px;
+box-shadow:0 10px 30px rgba(0,0,0,.06);
 line-height:1.7;
 }
 
-/* PREVIEW */
+/* CAPTION CARD */
 
-#preview{
-margin-top:20px;
-max-width:350px;
+.captionCard{
+background:#f7f8ff;
+padding:15px;
 border-radius:10px;
-display:none;
+margin-top:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-/* COPY */
-
-.copy{
+.copyBtn{
 background:#111;
+padding:6px 12px;
 font-size:13px;
-padding:5px 10px;
-margin-left:10px;
+}
+
+/* TAGS */
+
+.tags{
+margin-top:10px;
+color:#555;
 }
 
 /* LOADING */
@@ -158,7 +175,7 @@ font-style:italic;
 
 <div class="main">
 
-<!-- CAPTION -->
+<!-- CAPTION TOOL -->
 
 <div id="caption" class="tool active">
 
@@ -178,7 +195,11 @@ font-style:italic;
 
 <br>
 
-<input type="file" id="image">
+<button onclick="document.getElementById('image').click()">
+Upload Image
+</button>
+
+<input type="file" id="image" style="display:none">
 
 <br>
 
@@ -190,11 +211,13 @@ font-style:italic;
 
 <br>
 
-<button onclick="generateCaption()">Generate Caption</button>
+<button onclick="generateCaption()">
+Generate Caption
+</button>
 
 <div id="loading" class="loading"></div>
 
-<div class="result" id="captionResult"></div>
+<div id="captionResult"></div>
 
 </div>
 
@@ -306,6 +329,8 @@ font-style:italic;
 
 const API="https://ai-caption-server-3rxf.onrender.com"
 
+/* TOOL SWITCH */
+
 function openTool(name){
 
 document.querySelectorAll(".tool").forEach(t=>t.classList.remove("active"))
@@ -363,7 +388,7 @@ return
 
 const reader=new FileReader()
 
-document.getElementById("loading").innerText="Generating content..."
+document.getElementById("loading").innerText="Generating AI content..."
 
 reader.onload=async function(){
 
@@ -386,19 +411,39 @@ const data=await res.json()
 
 document.getElementById("loading").innerText=""
 
-let html=""
+let html="<div class='result'>"
 
 html+="<h3>Optimized Caption</h3>"
-html+=data.optimized_caption+" <button class='copy' onclick='copy(`"+data.optimized_caption+"`)'>copy</button>"
+html+="<div class='captionCard'>"+data.optimized_caption+
+"<button class='copyBtn' onclick='copy(`"+data.optimized_caption+"`)'>copy</button></div>"
+
+html+="<h3>Viral Score</h3>"+data.viral_score+"/10"
+
+html+="<h3>Why It Works</h3>"+data.why_it_works
 
 html+="<h3>Captions</h3>"
-data.captions.forEach(c=>html+=c+"<br>")
+
+data.captions.forEach(c=>{
+
+html+="<div class='captionCard'>"+c+
+"<button class='copyBtn' onclick='copy(`"+c+"`)'>copy</button></div>"
+
+})
 
 html+="<h3>Hooks</h3>"
+
 data.hooks.forEach(h=>html+=h+"<br>")
 
 html+="<h3>Hashtags</h3>"
-html+=data.hashtags.join(" ")
+html+="<div class='tags'>"+data.hashtags.join(" ")+"</div>"
+
+html+="<h3>Reel Script</h3>"
+
+html+="<b>Hook</b><br>"+data.reel_script.hook+"<br><br>"
+html+="<b>Scene</b><br>"+data.reel_script.scene+"<br><br>"
+html+="<b>Voiceover</b><br>"+data.reel_script.voiceover
+
+html+="</div>"
 
 document.getElementById("captionResult").innerHTML=html
 
@@ -419,10 +464,13 @@ let html=""
 
 data.trends.forEach(t=>{
 
+html+="<div class='result'>"
 html+="<h3>"+t.title+"</h3>"
-html+="Platform: "+t.platform+"<br>"
-html+="<b>Why Trending</b><br>"+t.why_trending+"<br>"
+html+="Platform: "+t.platform+"<br><br>"
+html+="<b>Why Trending</b><br>"+t.why_trending+"<br><br>"
 html+="<b>Content Idea</b><br>"+t.content_idea+"<br><br>"
+html+="<b>Example Hook</b><br>"+t.example_hook
+html+="</div>"
 
 })
 
@@ -441,9 +489,11 @@ let html=""
 
 data.viral_topics.forEach(v=>{
 
+html+="<div class='result'>"
 html+="<h3>"+v.title+"</h3>"
-html+="Hook: "+v.hook+"<br>"
-html+="Why Viral: "+v.why_viral+"<br><br>"
+html+="<b>Hook</b><br>"+v.hook+"<br><br>"
+html+="<b>Why Viral</b><br>"+v.why_viral
+html+="</div>"
 
 })
 
@@ -469,7 +519,7 @@ body:JSON.stringify({niche})
 
 const data=await res.json()
 
-let html=""
+let html="<div class='result'>"
 
 data.calendar.forEach(d=>{
 
@@ -477,6 +527,8 @@ html+="Day "+d.day+" — "+d.title+"<br>"
 html+="Hook: "+d.hook+"<br><br>"
 
 })
+
+html+="</div>"
 
 document.getElementById("calendarResult").innerHTML=html
 
@@ -504,9 +556,11 @@ const data=await res.json()
 
 document.getElementById("reelResult").innerHTML=
 
+"<div class='result'>"+
 "<h3>"+data.title+"</h3>"+
 "<b>Hook</b><br>"+data.hook+"<br><br>"+
-"<b>Caption</b><br>"+data.caption
+"<b>Caption</b><br>"+data.caption+
+"</div>"
 
 }
 
@@ -532,9 +586,10 @@ const data=await res.json()
 
 document.getElementById("competitorResult").innerHTML=
 
+"<div class='result'>"+
 "<h3>Content Strategy</h3>"+data.content_strategy+
-
-"<h3>Growth Tips</h3>"+data.growth_tips
+"<h3>Growth Tips</h3>"+data.growth_tips+
+"</div>"
 
 }
 
