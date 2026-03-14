@@ -3,84 +3,114 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AI Creator Studio</title>
 
 <style>
 
 body{
-font-family:Arial,Helvetica,sans-serif;
 margin:0;
-background:#f4f6fb;
+font-family:Inter,Arial;
+background:#f6f7fb;
 color:#222;
 }
 
+/* NAV */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 60px;
+background:white;
+box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+
+nav h2{
+margin:0;
+}
+
+nav a{
+text-decoration:none;
+color:#4f46e5;
+font-weight:600;
+}
+
+/* HERO */
+
 .hero{
+padding:100px 60px;
 text-align:center;
-padding:100px 20px;
 }
 
 .hero h1{
-font-size:48px;
+font-size:42px;
 margin-bottom:20px;
 }
 
 .hero p{
-font-size:20px;
+font-size:18px;
 color:#555;
-max-width:700px;
+max-width:600px;
 margin:auto;
 }
 
-.btn{
-display:inline-block;
+.cta{
 margin-top:30px;
-padding:14px 30px;
+}
+
+button{
 background:#4f46e5;
 color:white;
-text-decoration:none;
+border:none;
+padding:14px 28px;
 border-radius:8px;
-font-weight:bold;
+font-size:16px;
+cursor:pointer;
 }
 
-.section{
-max-width:1100px;
-margin:auto;
-padding:80px 20px;
+button:hover{
+opacity:.9;
 }
+
+/* FEATURES */
 
 .features{
+padding:80px 60px;
+background:white;
+}
+
+.features h2{
+text-align:center;
+margin-bottom:50px;
+}
+
+.grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:30px;
-margin-top:40px;
 }
 
 .card{
-background:white;
+background:#f7f8ff;
 padding:25px;
 border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
+
+/* PRICING */
 
 .pricing{
-display:flex;
-gap:40px;
-justify-content:center;
-margin-top:40px;
-flex-wrap:wrap;
-}
-
-.plan{
-background:white;
-padding:40px;
-border-radius:12px;
-box-shadow:0 5px 20px rgba(0,0,0,0.05);
-width:260px;
+padding:80px 60px;
 text-align:center;
 }
 
-.plan h2{
-margin-bottom:10px;
+.priceBox{
+background:white;
+padding:40px;
+border-radius:14px;
+box-shadow:0 10px 30px rgba(0,0,0,.05);
+display:inline-block;
 }
 
 .price{
@@ -88,158 +118,140 @@ font-size:36px;
 margin:20px 0;
 }
 
-.faq{
-max-width:700px;
-margin:auto;
-margin-top:40px;
-line-height:1.7;
-}
+/* FOOTER */
 
-.footer{
-text-align:center;
+footer{
 padding:40px;
-color:#777;
-}
-
-@media(max-width:900px){
-
-.features{
-grid-template-columns:1fr;
-}
-
-.pricing{
-flex-direction:column;
-align-items:center;
-}
-
+text-align:center;
+color:#666;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="hero">
+<nav>
 
-<h1>
-Create viral captions from any photo in seconds.
-</h1>
+<h2>AI Creator Studio</h2>
+
+<a href="tool.html">Start Free</a>
+
+</nav>
+
+<section class="hero">
+
+<h1>Generate Viral Social Media Content with AI</h1>
 
 <p>
-Upload a photo and generate captions, hooks, hashtags and reel scripts instantly using AI.
+Create captions, hooks, hashtags and viral content ideas in seconds.
+Built for creators, marketers and brands.
 </p>
 
-<a class="btn" href="/tool.html">Start Creating</a>
+<div class="cta">
 
-</div>
-
-
-<div class="section">
-
-<h2 style="text-align:center;">Why creators use AI Creator Studio</h2>
-
-<div class="features">
-
-<div class="card">
-<h3>AI Caption Generator</h3>
-<p>Create engaging captions instantly from your images.</p>
-</div>
-
-<div class="card">
-<h3>Hook Generator</h3>
-<p>Generate scroll-stopping hooks that grab attention.</p>
-</div>
-
-<div class="card">
-<h3>Hashtag Optimizer</h3>
-<p>Get trending hashtags optimized for reach.</p>
-</div>
-
-<div class="card">
-<h3>Reel Script Generator</h3>
-<p>Turn posts into viral reel scripts automatically.</p>
-</div>
-
-<div class="card">
-<h3>Instant Results</h3>
-<p>No writing skills required. AI does the work.</p>
-</div>
-
-<div class="card">
-<h3>Save Hours</h3>
-<p>Create content 10x faster than manual writing.</p>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="section" id="pricing">
-
-<h2 style="text-align:center;">Simple pricing</h2>
-
-<div class="pricing">
-
-<div class="plan">
-
-<h2>Free</h2>
-
-<div class="price">$0</div>
-
-<p>1 generation per day</p>
-<p>Basic AI tools</p>
-
-</div>
-
-
-<div class="plan">
-
-<h2>Pro</h2>
-
-<div class="price">$12/mo</div>
-
-<p>Unlimited generations</p>
-<p>All AI tools</p>
-<p>Future updates</p>
-
-<a class="btn" href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384">
-Upgrade to Pro
+<a href="tool.html">
+<button>Start Free</button>
 </a>
 
 </div>
 
+</section>
+
+<section class="features">
+
+<h2>AI Tools</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Caption Generator</h3>
+<p>Create viral captions from images instantly.</p>
+</div>
+
+<div class="card">
+<h3>Trend Detector</h3>
+<p>Discover trending topics before they explode.</p>
+</div>
+
+<div class="card">
+<h3>Viral Ideas</h3>
+<p>Generate scroll-stopping content ideas.</p>
+</div>
+
+<div class="card">
+<h3>Content Calendar</h3>
+<p>Plan 30 days of social media content.</p>
+</div>
+
+<div class="card">
+<h3>Reel Generator</h3>
+<p>Create short-form video scripts in seconds.</p>
+</div>
+
+<div class="card">
+<h3>Competitor Analyzer</h3>
+<p>Analyze creators and learn their strategy.</p>
 </div>
 
 </div>
 
+</section>
 
-<div class="section">
+<section class="pricing">
 
-<h2 style="text-align:center;">FAQ</h2>
+<h2>Pricing</h2>
 
-<div class="faq">
+<div class="priceBox">
 
-<p><b>How does the AI work?</b><br>
-Upload a photo and the AI analyzes the image to generate captions and hooks.</p>
+<h3>Free</h3>
 
-<p><b>Which platforms is it for?</b><br>
-Instagram, TikTok, YouTube Shorts and any social media platform.</p>
+<p>Try the AI caption generator.</p>
 
-<p><b>Can I cancel anytime?</b><br>
-Yes, you can cancel your subscription anytime.</p>
+<div class="price">$0</div>
+
+<p>1 caption per day</p>
+
+<br>
+
+<a href="tool.html">
+<button>Start Free</button>
+</a>
+
+</div>
+
+<br><br>
+
+<div class="priceBox">
+
+<h3>Pro</h3>
+
+<div class="price">$12 / month</div>
+
+<p>Unlimited AI tools</p>
+<p>Caption Generator</p>
+<p>Trend Detector</p>
+<p>Viral Ideas</p>
+<p>Content Calendar</p>
+<p>Reel Generator</p>
+<p>Competitor Analyzer</p>
+
+<br>
+
+<a href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384">
+<button>Upgrade to Pro</button>
+</a>
 
 </div>
 
-</div>
+</section>
 
+<footer>
 
-<div class="footer">
+AI Creator Studio © 2026
 
-<p>AI Creator Studio</p>
-
-</div>
+</footer>
 
 </body>
 </html>
-
