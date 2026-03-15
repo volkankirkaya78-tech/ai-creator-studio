@@ -5,6 +5,19 @@
 <meta charset="UTF-8">
 <title>AI Creator Studio</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
+"https://zfqgqpactijrdwvuocga.supabase.co",
+"sb_publishable_O_imKScPW4mB4zaKfjdBhg_hbdioqDR"
+);
+
+
+</script>
 <style>
 
 body{
@@ -198,6 +211,23 @@ Upload Image
 <img id="preview">
 
 <br>
+<div style="margin-top:20px;background:white;padding:15px;border-radius:10px">
+
+<b>User Login</b><br><br>
+
+<input id="loginEmail" placeholder="Email">
+<br>
+
+<input id="loginPassword" type="password" placeholder="Password">
+
+<br>
+
+<button onclick="signUp()">Sign Up</button>
+<button onclick="login()">Login</button>
+
+<p id="authStatus"></p>
+
+</div>
 
 <input id="email" placeholder="Enter email to generate">
 
@@ -462,6 +492,41 @@ document.getElementById("captionResult").innerHTML=html
 }
 
 reader.readAsDataURL(file)
+
+}
+async function signUp(){
+
+const email=document.getElementById("loginEmail").value
+const password=document.getElementById("loginPassword").value
+
+const { data, error } = await supabaseClient.auth.signUp({
+email: email,
+password: password
+})
+
+if(error){
+document.getElementById("authStatus").innerText=error.message
+}else{
+document.getElementById("authStatus").innerText="User created"
+}
+
+}
+
+async function login(){
+
+const email=document.getElementById("loginEmail").value
+const password=document.getElementById("loginPassword").value
+
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+email: email,
+password: password
+})
+
+if(error){
+document.getElementById("authStatus").innerText=error.message
+}else{
+document.getElementById("authStatus").innerText="Logged in"
+}
 
 }
 
