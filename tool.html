@@ -142,6 +142,17 @@ Upload Image
 <button onclick="signUp()">Sign Up</button>
 <button onclick="login()">Login</button>
 
+<br><br>
+
+<button onclick="loginWithGoogle()" style="background:#ea4335">
+Continue with Google
+</button>
+
+<button onclick="loginWithGoogle()" style="background:#ea4335">
+Continue with Google
+</button>
+
+<p id="authStatus"></p>
 <p id="authStatus"></p>
 
 </div>
@@ -215,16 +226,25 @@ password: password
 })
 
 if(error){
-
 document.getElementById("authStatus").innerText=error.message
-
 }else{
-
 document.getElementById("authStatus").innerText="Logged in"
-
 }
 
 }
+
+async function loginWithGoogle(){
+
+const { data, error } = await supabaseClient.auth.signInWithOAuth({
+provider: 'google'
+})
+
+if(error){
+document.getElementById("authStatus").innerText=error.message
+}
+
+}
+
 
 async function generateCaption(){
 
