@@ -16,8 +16,8 @@ const supabaseClient = createClient(
 "sb_publishable_O_imKScPW4mB4zaKfjdBhg_hbdioqDR"
 );
 
-
 </script>
+
 <style>
 
 body{
@@ -30,8 +30,6 @@ background:#f5f7fb;
 display:flex;
 height:100vh;
 }
-
-/* SIDEBAR */
 
 .sidebar{
 width:240px;
@@ -59,23 +57,11 @@ margin-bottom:10px;
 background:#2e3252;
 }
 
-/* MAIN */
-
 .main{
 flex:1;
 padding:50px;
 overflow:auto;
 }
-
-.tool{
-display:none;
-}
-
-.tool.active{
-display:block;
-}
-
-/* BUTTON */
 
 button{
 background:#4f46e5;
@@ -88,13 +74,7 @@ font-size:15px;
 margin-top:15px;
 }
 
-button:hover{
-opacity:.9;
-}
-
-/* INPUT */
-
-input,select{
+input{
 padding:10px;
 border-radius:8px;
 border:1px solid #ddd;
@@ -102,55 +82,12 @@ margin-top:10px;
 width:260px;
 }
 
-/* IMAGE */
-
-#preview{
-margin-top:20px;
-max-width:380px;
-border-radius:12px;
-display:none;
-}
-
-/* RESULT */
-
 .result{
 background:white;
 padding:25px;
 border-radius:14px;
 margin-top:25px;
 box-shadow:0 10px 30px rgba(0,0,0,.05);
-}
-
-/* CAPTION CARD */
-
-.captionCard{
-background:#f7f8ff;
-padding:15px;
-border-radius:10px;
-margin-top:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.copyBtn{
-background:#111;
-padding:6px 12px;
-font-size:12px;
-}
-
-/* TAGS */
-
-.tags{
-margin-top:10px;
-color:#555;
-}
-
-/* LOADING */
-
-.loading{
-margin-top:20px;
-font-style:italic;
 }
 
 </style>
@@ -167,12 +104,7 @@ font-style:italic;
 
 <div class="menu">
 
-<div onclick="openTool('caption')">Caption Generator</div>
-<div onclick="openTool('trend')">Trend Detector</div>
-<div onclick="openTool('viral')">Viral Ideas</div>
-<div onclick="openTool('calendar')">Content Calendar</div>
-<div onclick="openTool('reel')">Reel Generator</div>
-<div onclick="openTool('competitor')">Competitor Analyzer</div>
+<div>Caption Generator</div>
 
 </div>
 
@@ -180,23 +112,11 @@ font-style:italic;
 
 <div class="main">
 
-<!-- CAPTION TOOL -->
-
-<div id="caption" class="tool active">
-
 <h2>Caption Generator</h2>
 
-<p>Upload an image and generate viral captions.</p>
+<p>Upload image and generate caption.</p>
 
-<select id="style">
-
-<option value="viral">Viral</option>
-<option value="funny">Funny</option>
-<option value="emotional">Emotional</option>
-<option value="story">Story</option>
-<option value="luxury">Luxury</option>
-
-</select>
+<img id="preview" style="max-width:350px;border-radius:10px">
 
 <br>
 
@@ -206,14 +126,11 @@ Upload Image
 
 <input type="file" id="image" style="display:none">
 
-<br>
+<br><br>
 
-<img id="preview">
+<div style="background:white;padding:20px;border-radius:10px">
 
-<br>
-<div style="margin-top:20px;background:white;padding:15px;border-radius:10px">
-
-<b>User Login</b><br><br>
+<h3>User Login</h3>
 
 <input id="loginEmail" placeholder="Email">
 <br>
@@ -229,119 +146,15 @@ Upload Image
 
 </div>
 
-<input id="email" placeholder="Enter email to generate">
-
 <br>
 
 <button onclick="generateCaption()">
 Generate Caption
 </button>
 
-<div id="loading" class="loading"></div>
+<div id="loading"></div>
 
 <div id="captionResult"></div>
-
-</div>
-
-<!-- TREND -->
-
-<div id="trend" class="tool">
-
-<h2>Trend Detector</h2>
-
-<button onclick="detectTrends()">Find Trends</button>
-
-<div id="trendResult"></div>
-
-</div>
-
-<!-- VIRAL IDEAS -->
-
-<div id="viral" class="tool">
-
-<h2>Viral Ideas</h2>
-
-<button onclick="viralIdeas()">Generate Ideas</button>
-
-<div id="viralResult"></div>
-
-</div>
-
-<!-- CALENDAR -->
-
-<div id="calendar" class="tool">
-
-<h2>Content Calendar</h2>
-
-<input id="niche" placeholder="Enter niche">
-
-<br>
-
-<button onclick="calendar()">Generate Calendar</button>
-
-<div id="calendarResult"></div>
-
-</div>
-
-<!-- REEL -->
-
-<div id="reel" class="tool">
-
-<h2>Reel Generator</h2>
-
-<input id="topic" placeholder="Topic">
-
-<br>
-
-<input id="reelNiche" placeholder="Niche">
-
-<br>
-
-<select id="platform">
-
-<option>Instagram</option>
-<option>TikTok</option>
-<option>YouTube</option>
-
-</select>
-
-<br>
-
-<button onclick="generateReel()">Generate Reel</button>
-
-<div id="reelResult"></div>
-
-</div>
-
-<!-- COMPETITOR -->
-
-<div id="competitor" class="tool">
-
-<h2>Competitor Analyzer</h2>
-
-<input id="username" placeholder="Username">
-
-<br>
-
-<input id="compNiche" placeholder="Niche">
-
-<br>
-
-<select id="compPlatform">
-
-<option>Instagram</option>
-<option>TikTok</option>
-<option>YouTube</option>
-
-</select>
-
-<br>
-
-<button onclick="analyze()">Analyze</button>
-
-<div id="competitorResult"></div>
-
-</div>
 
 </div>
 
@@ -351,23 +164,9 @@ Generate Caption
 
 const API="https://ai-caption-server-3rxf.onrender.com"
 
-function openTool(name){
-
-document.querySelectorAll(".tool").forEach(t=>t.classList.remove("active"))
-document.getElementById(name).classList.add("active")
-
-}
-
-/* IMAGE PREVIEW */
-
 document.getElementById("image").addEventListener("change",function(){
 
 const file=this.files[0]
-
-if(!file.type.startsWith("image/")){
-alert("Upload an image file")
-return
-}
 
 const reader=new FileReader()
 
@@ -376,7 +175,6 @@ reader.onload=function(e){
 const img=document.getElementById("preview")
 
 img.src=e.target.result
-img.style.display="block"
 
 }
 
@@ -384,116 +182,6 @@ reader.readAsDataURL(file)
 
 })
 
-/* COPY */
-
-function copy(text){
-
-navigator.clipboard.writeText(text)
-alert("Copied!")
-
-}
-
-/* FREE LIMIT */
-
-function checkFreeLimit(){
-
-const today=new Date().toDateString()
-const used=localStorage.getItem("freeUsedDate")
-
-if(used===today){
-
-window.location.href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384"
-return false
-
-}
-
-return true
-
-}
-
-/* CAPTION */
-
-async function generateCaption(){
-
-if(!checkFreeLimit()) return
-
-const file=document.getElementById("image").files[0]
-const style=document.getElementById("style").value
-const email=document.getElementById("email").value
-
-if(!email){
-alert("Enter email first")
-return
-}
-
-const reader=new FileReader()
-
-document.getElementById("loading").innerText="Generating AI content..."
-
-reader.onload=async function(){
-
-const res=await fetch(API+"/caption",{
-
-method:"POST",
-
-headers:{ "Content-Type":"application/json" },
-
-body:JSON.stringify({
-
-image:reader.result,
-style
-
-})
-
-})
-
-const data=await res.json()
-
-localStorage.setItem("freeUsedDate",new Date().toDateString())
-
-document.getElementById("loading").innerText=""
-
-let html="<div class='result'>"
-
-html+="<h3>Optimized Caption</h3>"
-html+="<div class='captionCard'>"+data.optimized_caption+
-"<button class='copyBtn' onclick='copy(`"+data.optimized_caption+"`)'>copy</button></div>"
-
-html+="<h3>Viral Score</h3>"+data.viral_score+"/10"
-
-html+="<h3>Why It Works</h3>"+data.why_it_works
-
-html+="<h3>Captions</h3>"
-
-data.captions.forEach(c=>{
-
-html+="<div class='captionCard'>"+c+
-"<button class='copyBtn' onclick='copy(`"+c+"`)'>copy</button></div>"
-
-})
-
-html+="<h3>Hooks</h3>"
-
-data.hooks.forEach(h=>html+=h+"<br>")
-
-html+="<h3>Hashtags</h3>"
-html+="<div class='tags'>"+data.hashtags.join(" ")+"</div>"
-
-html+="<h3>Reel Script</h3>"
-
-html+="<b>Hook</b><br>"+data.reel_script.hook+"<br><br>"
-html+="<b>Scene</b><br>"+data.reel_script.scene+"<br><br>"
-html+="<b>Voiceover</b><br>"+data.reel_script.voiceover
-
-html+="</div>"
-
-document.getElementById("captionResult").innerHTML=html
-
-}
-
-reader.readAsDataURL(file)
-
-}
 async function signUp(){
 
 const email=document.getElementById("loginEmail").value
@@ -505,9 +193,13 @@ password: password
 })
 
 if(error){
+
 document.getElementById("authStatus").innerText=error.message
+
 }else{
+
 document.getElementById("authStatus").innerText="User created"
+
 }
 
 }
@@ -523,14 +215,47 @@ password: password
 })
 
 if(error){
+
 document.getElementById("authStatus").innerText=error.message
+
 }else{
+
 document.getElementById("authStatus").innerText="Logged in"
-}
 
 }
 
-</script>
+}
 
-</body>
-</html>
+async function generateCaption(){
+
+const { data: { session } } = await supabaseClient.auth.getSession();
+
+if(!session){
+
+alert("Please login first")
+
+return
+
+}
+
+const file=document.getElementById("image").files[0]
+
+if(!file){
+
+alert("Upload image")
+
+return
+
+}
+
+const reader=new FileReader()
+
+document.getElementById("loading").innerText="Generating..."
+
+reader.onload=async function(){
+
+const res=await fetch(API+"/caption",{
+
+method:"POST",
+
+headers:{ "Content-Type":"application/json"
