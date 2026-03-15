@@ -205,7 +205,13 @@ reader.readAsDataURL(file)
 async function loginWithGoogle(){
 
 await supabaseClient.auth.signInWithOAuth({
-provider:'google'
+
+provider:'google',
+
+options:{
+redirectTo: window.location.origin + "/tool.html"
+}
+
 })
 
 }
@@ -266,7 +272,7 @@ reader.readAsDataURL(file)
 
 }
 
-async function checkUser(){
+window.onload = async function(){
 
 const { data: { session } } =
 await supabaseClient.auth.getSession()
@@ -279,8 +285,6 @@ document.getElementById("toolBlock").style.display="block"
 }
 
 }
-
-checkUser()
 
 </script>
 
