@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -8,19 +9,21 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
 const { createClient } = supabase;
 
 const supabaseClient = createClient(
 "https://zfqgqpactijrdwvuocga.supabase.co",
 "sb_publishable_O_imKScPW4mB4zaKfjdBhg_hbdioqDR"
 );
+
 </script>
 
 <style>
 
 body{
 margin:0;
-font-family:Arial;
+font-family:Inter,Arial;
 background:#f5f7fb;
 }
 
@@ -41,14 +44,20 @@ margin-top:0;
 }
 
 .menu div{
-padding:10px;
-margin-top:10px;
+padding:12px;
+border-radius:8px;
 cursor:pointer;
+margin-bottom:10px;
+}
+
+.menu div:hover{
+background:#2e3252;
 }
 
 .main{
 flex:1;
 padding:50px;
+overflow:auto;
 }
 
 button{
@@ -58,14 +67,11 @@ border:none;
 padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
-margin-top:15px;
+font-size:15px;
+margin-top:10px;
 }
 
-.google{
-background:#ea4335;
-}
-
-input{
+input,select{
 padding:10px;
 border-radius:8px;
 border:1px solid #ddd;
@@ -75,16 +81,10 @@ width:260px;
 
 .card{
 background:white;
-padding:20px;
-border-radius:10px;
-margin-top:20px;
-}
-
-.result{
-background:white;
-padding:20px;
-border-radius:10px;
-margin-top:20px;
+padding:25px;
+border-radius:14px;
+margin-top:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.05);
 }
 
 </style>
@@ -100,12 +100,14 @@ margin-top:20px;
 <h2>AI Creator</h2>
 
 <div class="menu">
+
 <div>Caption Generator</div>
 <div>Trend Detector</div>
 <div>Viral Ideas</div>
 <div>Content Calendar</div>
 <div>Reel Generator</div>
 <div>Competitor Analyzer</div>
+
 </div>
 
 </div>
@@ -116,7 +118,7 @@ margin-top:20px;
 
 <p>Upload image and generate caption.</p>
 
-<img id="preview" style="max-width:350px;border-radius:10px;display:none">
+<img id="preview" style="max-width:350px;border-radius:10px">
 
 <br>
 
@@ -125,6 +127,16 @@ Upload Image
 </button>
 
 <input type="file" id="image" style="display:none">
+
+<br><br>
+
+<select id="style">
+<option value="viral">Viral</option>
+<option value="funny">Funny</option>
+<option value="emotional">Emotional</option>
+<option value="story">Story</option>
+<option value="luxury">Luxury</option>
+</select>
 
 <div class="card">
 
@@ -142,7 +154,7 @@ Upload Image
 
 <br><br>
 
-<button class="google" onclick="loginWithGoogle()">
+<button onclick="loginWithGoogle()" style="background:#ea4335">
 Continue with Google
 </button>
 
@@ -172,16 +184,11 @@ document.getElementById("image").addEventListener("change",function(){
 
 const file=this.files[0]
 
-if(!file) return
-
 const reader=new FileReader()
 
 reader.onload=function(e){
 
-const img=document.getElementById("preview")
-
-img.src=e.target.result
-img.style.display="block"
+document.getElementById("preview").src=e.target.result
 
 }
 
@@ -194,15 +201,24 @@ async function signUp(){
 const email=document.getElementById("loginEmail").value
 const password=document.getElementById("loginPassword").value
 
+if(!email || !password){
+alert("Enter email and password")
+return
+}
+
 const { data, error } = await supabaseClient.auth.signUp({
 email: email,
 password: password
 })
 
 if(error){
+
 document.getElementById("authStatus").innerText=error.message
+
 }else{
-document.getElementById("authStatus").innerText="User created"
+
+document.getElementById("authStatus").innerText="Account created. Now login."
+
 }
 
 }
@@ -231,26 +247,28 @@ const { data, error } = await supabaseClient.auth.signInWithOAuth({
 provider: 'google'
 })
 
-if(error){
-document.getElementById("authStatus").innerText=error.message
-}
-
 }
 
 async function generateCaption(){
 
-const { data: { session } } = await supabaseClient.auth.getSession();
+const { data: { session } } = await supabaseClient.auth.getSession()
 
 if(!session){
+
 alert("Please login first")
+
 return
+
 }
 
 const file=document.getElementById("image").files[0]
 
 if(!file){
-alert("Upload image first")
+
+alert("Upload image")
+
 return
+
 }
 
 const reader=new FileReader()
@@ -263,11 +281,15 @@ const res=await fetch(API+"/caption",{
 
 method:"POST",
 
-headers:{ "Content-Type":"application/json" },
+headers:{
+"Content-Type":"application/json"
+},
 
 body:JSON.stringify({
-image:reader.result,
-style:"viral"
+
+image:e.target.result,
+style:document.getElementById("style").value
+
 })
 
 })
@@ -276,8 +298,7 @@ const data=await res.json()
 
 document.getElementById("loading").innerText=""
 
-document.getElementById("captionResult").innerHTML=
-"<div class='result'><h3>"+data.optimized_caption+"</h3></div>"
+document.getElementById("captionResult").innerHTML="<div class='card'>"+data.caption+"</div>"
 
 }
 
