@@ -8,14 +8,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
 const { createClient } = supabase;
 
 const supabaseClient = createClient(
 "https://zfqgqpactijrdwvuocga.supabase.co",
 "sb_publishable_O_imKScPW4mB4zaKfjdBhg_hbdioqDR"
 );
-
 </script>
 
 <style>
@@ -38,6 +36,16 @@ color:white;
 padding:30px;
 }
 
+.sidebar h2{
+margin-top:0;
+}
+
+.menu div{
+padding:10px;
+margin-top:10px;
+cursor:pointer;
+}
+
 .main{
 flex:1;
 padding:50px;
@@ -51,6 +59,10 @@ padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
 margin-top:15px;
+}
+
+.google{
+background:#ea4335;
 }
 
 input{
@@ -75,10 +87,6 @@ border-radius:10px;
 margin-top:20px;
 }
 
-.google{
-background:#ea4335;
-}
-
 </style>
 
 </head>
@@ -91,7 +99,14 @@ background:#ea4335;
 
 <h2>AI Creator</h2>
 
-<p>Caption Generator</p>
+<div class="menu">
+<div>Caption Generator</div>
+<div>Trend Detector</div>
+<div>Viral Ideas</div>
+<div>Content Calendar</div>
+<div>Reel Generator</div>
+<div>Competitor Analyzer</div>
+</div>
 
 </div>
 
@@ -123,4 +138,154 @@ Upload Image
 <br>
 
 <button onclick="signUp()">Sign Up</button>
-<b
+<button onclick="login()">Login</button>
+
+<br><br>
+
+<button class="google" onclick="loginWithGoogle()">
+Continue with Google
+</button>
+
+<p id="authStatus"></p>
+
+</div>
+
+<br>
+
+<button onclick="generateCaption()">
+Generate Caption
+</button>
+
+<div id="loading"></div>
+
+<div id="captionResult"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const API="https://ai-caption-server-3rxf.onrender.com"
+
+document.getElementById("image").addEventListener("change",function(){
+
+const file=this.files[0]
+
+if(!file) return
+
+const reader=new FileReader()
+
+reader.onload=function(e){
+
+const img=document.getElementById("preview")
+
+img.src=e.target.result
+img.style.display="block"
+
+}
+
+reader.readAsDataURL(file)
+
+})
+
+async function signUp(){
+
+const email=document.getElementById("loginEmail").value
+const password=document.getElementById("loginPassword").value
+
+const { data, error } = await supabaseClient.auth.signUp({
+email: email,
+password: password
+})
+
+if(error){
+document.getElementById("authStatus").innerText=error.message
+}else{
+document.getElementById("authStatus").innerText="User created"
+}
+
+}
+
+async function login(){
+
+const email=document.getElementById("loginEmail").value
+const password=document.getElementById("loginPassword").value
+
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+email: email,
+password: password
+})
+
+if(error){
+document.getElementById("authStatus").innerText=error.message
+}else{
+document.getElementById("authStatus").innerText="Logged in"
+}
+
+}
+
+async function loginWithGoogle(){
+
+const { data, error } = await supabaseClient.auth.signInWithOAuth({
+provider: 'google'
+})
+
+if(error){
+document.getElementById("authStatus").innerText=error.message
+}
+
+}
+
+async function generateCaption(){
+
+const { data: { session } } = await supabaseClient.auth.getSession();
+
+if(!session){
+alert("Please login first")
+return
+}
+
+const file=document.getElementById("image").files[0]
+
+if(!file){
+alert("Upload image first")
+return
+}
+
+const reader=new FileReader()
+
+document.getElementById("loading").innerText="Generating..."
+
+reader.onload=async function(){
+
+const res=await fetch(API+"/caption",{
+
+method:"POST",
+
+headers:{ "Content-Type":"application/json" },
+
+body:JSON.stringify({
+image:reader.result,
+style:"viral"
+})
+
+})
+
+const data=await res.json()
+
+document.getElementById("loading").innerText=""
+
+document.getElementById("captionResult").innerHTML=
+"<div class='result'><h3>"+data.optimized_caption+"</h3></div>"
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+</script>
+
+</body>
+</html>
