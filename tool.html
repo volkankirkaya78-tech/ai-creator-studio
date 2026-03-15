@@ -263,9 +263,8 @@ const data=await res.json()
 
 document.getElementById("loading").innerText=""
 
-document.getElementById("captionResult").innerHTML=
-"<div class='card'>"+data.caption+"</div>"
-
+document.getElementById("captionResult").innerHTML =
+"<div class='card'>" + data.optimized_caption + "</div>"
 }
 
 reader.readAsDataURL(file)
