@@ -22,7 +22,7 @@ const supabaseClient = createClient(
 
 body{
 margin:0;
-font-family:Inter,Arial;
+font-family:Arial;
 background:#f5f7fb;
 }
 
@@ -38,29 +38,9 @@ color:white;
 padding:30px;
 }
 
-.sidebar h2{
-margin-top:0;
-}
-
-.menu{
-margin-top:30px;
-}
-
-.menu div{
-padding:12px;
-border-radius:8px;
-cursor:pointer;
-margin-bottom:10px;
-}
-
-.menu div:hover{
-background:#2e3252;
-}
-
 .main{
 flex:1;
 padding:50px;
-overflow:auto;
 }
 
 button{
@@ -70,7 +50,6 @@ border:none;
 padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
-font-size:15px;
 margin-top:15px;
 }
 
@@ -82,12 +61,22 @@ margin-top:10px;
 width:260px;
 }
 
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-top:20px;
+}
+
 .result{
 background:white;
-padding:25px;
-border-radius:14px;
-margin-top:25px;
-box-shadow:0 10px 30px rgba(0,0,0,.05);
+padding:20px;
+border-radius:10px;
+margin-top:20px;
+}
+
+.google{
+background:#ea4335;
 }
 
 </style>
@@ -102,11 +91,7 @@ box-shadow:0 10px 30px rgba(0,0,0,.05);
 
 <h2>AI Creator</h2>
 
-<div class="menu">
-
-<div>Caption Generator</div>
-
-</div>
+<p>Caption Generator</p>
 
 </div>
 
@@ -116,7 +101,7 @@ box-shadow:0 10px 30px rgba(0,0,0,.05);
 
 <p>Upload image and generate caption.</p>
 
-<img id="preview" style="max-width:350px;border-radius:10px">
+<img id="preview" style="max-width:350px;border-radius:10px;display:none">
 
 <br>
 
@@ -126,9 +111,7 @@ Upload Image
 
 <input type="file" id="image" style="display:none">
 
-<br><br>
-
-<div style="background:white;padding:20px;border-radius:10px">
+<div class="card">
 
 <h3>User Login</h3>
 
@@ -140,142 +123,4 @@ Upload Image
 <br>
 
 <button onclick="signUp()">Sign Up</button>
-<button onclick="login()">Login</button>
-
-<br><br>
-
-<button onclick="loginWithGoogle()" style="background:#ea4335">
-Continue with Google
-</button>
-
-<button onclick="loginWithGoogle()" style="background:#ea4335">
-Continue with Google
-</button>
-
-<p id="authStatus"></p>
-<p id="authStatus"></p>
-
-</div>
-
-<br>
-
-<button onclick="generateCaption()">
-Generate Caption
-</button>
-
-<div id="loading"></div>
-
-<div id="captionResult"></div>
-
-</div>
-
-</div>
-
-<script>
-
-const API="https://ai-caption-server-3rxf.onrender.com"
-
-document.getElementById("image").addEventListener("change",function(){
-
-const file=this.files[0]
-
-const reader=new FileReader()
-
-reader.onload=function(e){
-
-const img=document.getElementById("preview")
-
-img.src=e.target.result
-
-}
-
-reader.readAsDataURL(file)
-
-})
-
-async function signUp(){
-
-const email=document.getElementById("loginEmail").value
-const password=document.getElementById("loginPassword").value
-
-const { data, error } = await supabaseClient.auth.signUp({
-email: email,
-password: password
-})
-
-if(error){
-
-document.getElementById("authStatus").innerText=error.message
-
-}else{
-
-document.getElementById("authStatus").innerText="User created"
-
-}
-
-}
-
-async function login(){
-
-const email=document.getElementById("loginEmail").value
-const password=document.getElementById("loginPassword").value
-
-const { data, error } = await supabaseClient.auth.signInWithPassword({
-email: email,
-password: password
-})
-
-if(error){
-document.getElementById("authStatus").innerText=error.message
-}else{
-document.getElementById("authStatus").innerText="Logged in"
-}
-
-}
-
-async function loginWithGoogle(){
-
-const { data, error } = await supabaseClient.auth.signInWithOAuth({
-provider: 'google'
-})
-
-if(error){
-document.getElementById("authStatus").innerText=error.message
-}
-
-}
-
-
-async function generateCaption(){
-
-const { data: { session } } = await supabaseClient.auth.getSession();
-
-if(!session){
-
-alert("Please login first")
-
-return
-
-}
-
-const file=document.getElementById("image").files[0]
-
-if(!file){
-
-alert("Upload image")
-
-return
-
-}
-
-const reader=new FileReader()
-
-document.getElementById("loading").innerText="Generating..."
-
-reader.onload=async function(){
-
-const res=await fetch(API+"/caption",{
-
-method:"POST",
-
-headers:{ "Content-Type":"application/json"
+<b
