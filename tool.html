@@ -10,12 +10,12 @@
 
 <script>
 
-const { createClient } = supabase
+const { createClient } = supabase;
 
 const supabaseClient = createClient(
 "https://zfqgqpactijrdwvuocga.supabase.co",
 "sb_publishable_O_imKScPW4mB4zaKfjdBhg_hbdioqDR"
-)
+);
 
 </script>
 
@@ -61,7 +61,6 @@ background:#2e3252;
 .main{
 flex:1;
 padding:50px;
-overflow:auto;
 }
 
 button{
@@ -71,16 +70,7 @@ border:none;
 padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
-font-size:15px;
 margin-top:10px;
-}
-
-select{
-padding:10px;
-border-radius:8px;
-border:1px solid #ddd;
-margin-top:10px;
-width:200px;
 }
 
 .card{
@@ -89,6 +79,13 @@ padding:25px;
 border-radius:14px;
 margin-top:25px;
 box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+select{
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+margin-top:10px;
 }
 
 </style>
@@ -118,9 +115,34 @@ box-shadow:0 10px 30px rgba(0,0,0,.05);
 
 <div class="main">
 
-<h2>Caption Generator</h2>
+<!-- LOGIN BLOCK -->
 
-<p>Upload image and generate caption.</p>
+<div id="loginBlock" class="card">
+
+<h3>Start Free Trial</h3>
+
+<p>Login with Google to generate captions.</p>
+
+<button onclick="loginWithGoogle()" style="background:#ea4335">
+Sign in with Google
+</button>
+
+<br><br>
+
+<a href="demo.html">
+<button style="background:#111">
+See Demo
+</button>
+</a>
+
+</div>
+
+
+<!-- TOOL BLOCK -->
+
+<div id="toolBlock" style="display:none">
+
+<h2>Caption Generator</h2>
 
 <img id="preview" style="max-width:350px;border-radius:10px">
 
@@ -142,19 +164,7 @@ Upload Image
 <option value="luxury">Luxury</option>
 </select>
 
-<div class="card">
-
-<h3>Login Required</h3>
-
-<p>Login with Google to use AI tools</p>
-
-<button onclick="loginWithGoogle()" style="background:#ea4335">
-Continue with Google
-</button>
-
-</div>
-
-<br>
+<br><br>
 
 <button onclick="generateCaption()">
 Generate Caption
@@ -163,6 +173,8 @@ Generate Caption
 <div id="loading"></div>
 
 <div id="captionResult"></div>
+
+</div>
 
 </div>
 
@@ -253,6 +265,22 @@ document.getElementById("captionResult").innerHTML=
 reader.readAsDataURL(file)
 
 }
+
+async function checkUser(){
+
+const { data: { session } } =
+await supabaseClient.auth.getSession()
+
+if(session){
+
+document.getElementById("loginBlock").style.display="none"
+document.getElementById("toolBlock").style.display="block"
+
+}
+
+}
+
+checkUser()
 
 </script>
 
