@@ -135,13 +135,11 @@ margin-top:30px;
 
 <div class="main">
 
-<!-- LOGIN BLOCK -->
-
 <div id="loginBlock" class="card">
 
 <h3>Start Free Trial</h3>
 
-<p>Login with Google to generate viral social media captions.</p>
+<p>Login with Google to generate viral captions.</p>
 
 <button class="google" onclick="loginWithGoogle()">
 Continue with Google
@@ -154,9 +152,6 @@ Continue with Google
 </a>
 
 </div>
-
-
-<!-- TOOL BLOCK -->
 
 <div id="toolBlock" style="display:none">
 
@@ -233,7 +228,6 @@ const API="https://ai-caption-server-3rxf.onrender.com"
 
 let freeUsed=false
 
-
 document.getElementById("image").addEventListener("change",function(){
 
 const file=this.files[0]
@@ -252,7 +246,6 @@ reader.readAsDataURL(file)
 
 })
 
-
 async function loginWithGoogle(){
 
 await supabaseClient.auth.signInWithOAuth({
@@ -266,8 +259,6 @@ redirectTo: window.location.origin + "/tool.html"
 })
 
 }
-
-
 
 async function generateCaption(){
 
@@ -301,7 +292,15 @@ return
 
 const reader=new FileReader()
 
-document.getElementById("loading").innerText="Generating..."
+document.getElementById("loading").innerHTML="Analyzing image..."
+
+setTimeout(()=>{
+document.getElementById("loading").innerHTML="Generating captions..."
+},1200)
+
+setTimeout(()=>{
+document.getElementById("loading").innerHTML="Calculating viral score..."
+},2400)
 
 reader.onload=async function(e){
 
@@ -337,29 +336,28 @@ document.getElementById("captionResult").innerHTML =
 
 <button onclick="copyCaption()">Copy Caption</button>
 
-
 <h3>Caption Ideas</h3>
 
 <ul>
 
-<li>${data.optimized_caption}</li>
-
-<li>${data.optimized_caption.replace("!", " ✨")}</li>
-
-<li>${data.optimized_caption.replace(".", " 🔥")}</li>
+<li>${data.captions[0]}</li>
+<li>${data.captions[1]}</li>
+<li>${data.captions[2]}</li>
+<li>${data.captions[3]}</li>
+<li>${data.captions[4]}</li>
 
 </ul>
 
 <h3>Viral Score</h3>
-<p>${data.viral_score}</p>
+<p>${data.viral_score}/10</p>
 
 <h3>Hooks</h3>
 <ul>
-${data.hooks.split(",").map(h => `<li>${h}</li>`).join("")}
+${data.hooks.map(h=>`<li>${h}</li>`).join("")}
 </ul>
 
 <h3>Hashtags</h3>
-<p>${data.hashtags.split(",").join(" ")}</p>
+<p>${data.hashtags.join(" ")}</p>
 
 <h3>Reel Script</h3>
 
@@ -378,7 +376,15 @@ reader.readAsDataURL(file)
 
 }
 
+function copyCaption(){
 
+const text=document.getElementById("mainCaption").innerText
+
+navigator.clipboard.writeText(text)
+
+alert("Caption copied")
+
+}
 
 window.onload = async function(){
 
