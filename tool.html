@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>AI Creator Studio</title>
+<title>Viral Studio AI</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -23,8 +23,8 @@ const supabaseClient = createClient(
 
 body{
 margin:0;
-font-family:Inter,Arial;
-background:#f4f6fb;
+font-family:Arial;
+background:#f5f7fb;
 }
 
 .container{
@@ -33,7 +33,7 @@ height:100vh;
 }
 
 .sidebar{
-width:260px;
+width:240px;
 background:#1f2235;
 color:white;
 padding:30px;
@@ -50,11 +50,16 @@ margin-top:30px;
 .menu div{
 padding:12px;
 border-radius:8px;
+cursor:pointer;
 margin-bottom:10px;
 }
 
-.pro{
-opacity:0.5;
+.menu div:hover{
+background:#2e3252;
+}
+
+.lock{
+opacity:0.6;
 }
 
 .main{
@@ -67,14 +72,18 @@ button{
 background:#4f46e5;
 color:white;
 border:none;
-padding:12px 22px;
+padding:12px 20px;
 border-radius:8px;
 cursor:pointer;
-font-size:15px;
+margin-top:10px;
 }
 
-button:hover{
-opacity:0.9;
+.google{
+background:#ea4335;
+}
+
+.upgrade{
+background:#7c3aed;
 }
 
 .card{
@@ -85,26 +94,18 @@ margin-top:25px;
 box-shadow:0 10px 30px rgba(0,0,0,.05);
 }
 
-select{
-padding:10px;
-border-radius:8px;
-border:1px solid #ddd;
-margin-top:10px;
-}
-
-.upgrade{
-background:#111;
-color:white;
-padding:25px;
+.preview{
+max-width:350px;
 border-radius:12px;
-margin-top:25px;
+margin-bottom:10px;
 }
 
-pre{
-background:#f4f4f4;
-padding:15px;
-border-radius:8px;
-white-space:pre-wrap;
+.upgradeBox{
+background:#0f0f0f;
+color:white;
+padding:30px;
+border-radius:16px;
+margin-top:30px;
 }
 
 </style>
@@ -117,17 +118,16 @@ white-space:pre-wrap;
 
 <div class="sidebar">
 
-<h2>AI Creator</h2>
+<h2>Viral Studio</h2>
 
 <div class="menu">
 
 <div>Caption Generator</div>
-
-<div class="pro">🔒 Trend Detector</div>
-<div class="pro">🔒 Viral Ideas</div>
-<div class="pro">🔒 Content Calendar</div>
-<div class="pro">🔒 Reel Generator</div>
-<div class="pro">🔒 Competitor Analyzer</div>
+<div class="lock">🔒 Trend Detector</div>
+<div class="lock">🔒 Viral Ideas</div>
+<div class="lock">🔒 Content Calendar</div>
+<div class="lock">🔒 Reel Generator</div>
+<div class="lock">🔒 Competitor Analyzer</div>
 
 </div>
 
@@ -135,15 +135,15 @@ white-space:pre-wrap;
 
 <div class="main">
 
-<!-- LOGIN -->
+<!-- LOGIN BLOCK -->
 
 <div id="loginBlock" class="card">
 
-<h2>Start Free</h2>
+<h3>Start Free Trial</h3>
 
 <p>Login with Google to generate viral social media captions.</p>
 
-<button onclick="loginWithGoogle()" style="background:#ea4335">
+<button class="google" onclick="loginWithGoogle()">
 Continue with Google
 </button>
 
@@ -156,15 +156,13 @@ Continue with Google
 </div>
 
 
-<!-- TOOL -->
+<!-- TOOL BLOCK -->
 
 <div id="toolBlock" style="display:none">
 
-<h2>AI Viral Caption Generator</h2>
+<h2>Caption Generator</h2>
 
-<p>Upload an image and generate viral captions.</p>
-
-<img id="preview" style="max-width:350px;border-radius:10px">
+<img id="preview" class="preview">
 
 <br>
 
@@ -188,11 +186,40 @@ Upload Image
 
 <br><br>
 
-<button onclick="generateCaption()">Generate Caption</button>
+<button onclick="generateCaption()">
+Generate Caption
+</button>
 
 <div id="loading"></div>
 
 <div id="captionResult"></div>
+
+<div id="upgradeBox" style="display:none" class="upgradeBox">
+
+<h3>Your free trial is complete</h3>
+
+<p>Upgrade to Pro to unlock:</p>
+
+<ul>
+
+<li>Unlimited captions</li>
+<li>Trend Detector</li>
+<li>Viral Ideas</li>
+<li>Content Calendar</li>
+<li>Reel Generator</li>
+<li>Competitor Analyzer</li>
+
+</ul>
+
+<a href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384" target="_blank">
+
+<button class="upgrade">
+Upgrade to Pro
+</button>
+
+</a>
+
+</div>
 
 </div>
 
@@ -204,7 +231,8 @@ Upload Image
 
 const API="https://ai-caption-server-3rxf.onrender.com"
 
-let used=false
+let freeUsed=false
+
 
 document.getElementById("image").addEventListener("change",function(){
 
@@ -224,6 +252,7 @@ reader.readAsDataURL(file)
 
 })
 
+
 async function loginWithGoogle(){
 
 await supabaseClient.auth.signInWithOAuth({
@@ -238,35 +267,23 @@ redirectTo: window.location.origin + "/tool.html"
 
 }
 
-window.onload = async function(){
 
-const { data: { session } } =
-await supabaseClient.auth.getSession()
-
-if(session){
-
-document.getElementById("loginBlock").style.display="none"
-document.getElementById("toolBlock").style.display="block"
-
-}
-
-}
 
 async function generateCaption(){
-
-if(used){
-
-window.location.href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384"
-
-return
-
-}
 
 const { data: { session } } = await supabaseClient.auth.getSession()
 
 if(!session){
 
 alert("Please login with Google")
+
+return
+
+}
+
+if(freeUsed){
+
+document.getElementById("upgradeBox").style.display="block"
 
 return
 
@@ -297,8 +314,10 @@ headers:{
 },
 
 body:JSON.stringify({
+
 image:e.target.result,
 style:document.getElementById("style").value
+
 })
 
 })
@@ -307,71 +326,53 @@ const data=await res.json()
 
 document.getElementById("loading").innerText=""
 
-let html=""
+document.getElementById("captionResult").innerHTML =
 
-html+="<div class='card'>"
-html+="<h3>Optimized Caption</h3>"
-html+="<p>"+data.optimized_caption+"</p>"
-html+="</div>"
+`
+<div class="card">
 
-html+="<div class='card'>"
-html+="<h3>Viral Score</h3>"
-html+="<p>"+data.viral_score+"</p>"
-html+="</div>"
+<h3>Optimized Caption</h3>
+<p>${data.optimized_caption}</p>
 
-html+="<div class='card'><h3>Caption Ideas</h3>"
+<h3>Viral Score</h3>
+<p>${data.viral_score}</p>
 
-data.captions.forEach(c=>{
-html+="<p>"+c+"</p>"
-})
+<h3>Hooks</h3>
+<p>${data.hooks}</p>
 
-html+="</div>"
+<h3>Hashtags</h3>
+<p>${data.hashtags}</p>
 
-html+="<div class='card'><h3>Hooks</h3>"
+<h3>Reel Script</h3>
 
-data.hooks.forEach(h=>{
-html+="<p>"+h+"</p>"
-})
+<p><b>Hook:</b> ${data.reel_script.hook}</p>
+<p><b>Scene:</b> ${data.reel_script.scene}</p>
+<p><b>Voiceover:</b> ${data.reel_script.voiceover}</p>
 
-html+="</div>"
+</div>
+`
 
-html+="<div class='card'><h3>Hashtags</h3>"
-
-data.hashtags.forEach(h=>{
-html+="<p>"+h+"</p>"
-})
-
-html+="</div>"
-
-html+="<div class='card'>"
-html+="<h3>Reel Script</h3>"
-html+="<pre>"+JSON.stringify(data.reel_script,null,2)+"</pre>"
-html+="</div>"
-
-html+="<div class='upgrade'>"
-html+="<h3>You used your free generation</h3>"
-html+="Upgrade to Pro to unlock:"
-html+="<br><br>"
-html+="✔ Unlimited captions<br>"
-html+="✔ Trend Detector<br>"
-html+="✔ Viral Ideas<br>"
-html+="✔ Content Calendar<br>"
-html+="✔ Reel Generator<br>"
-html+="✔ Competitor Analyzer<br><br>"
-
-html+="<a href='https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384'>"
-html+="<button>Upgrade to Pro</button>"
-html+="</a>"
-
-html+="</div>"
-
-document.getElementById("captionResult").innerHTML=html
-
-used=true
+freeUsed=true
 
 }
 
 reader.readAsDataURL(file)
+
+}
+
+
+
+window.onload = async function(){
+
+const { data: { session } } =
+await supabaseClient.auth.getSession()
+
+if(session){
+
+document.getElementById("loginBlock").style.display="none"
+document.getElementById("toolBlock").style.display="block"
+
+}
 
 }
 
