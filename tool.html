@@ -332,16 +332,34 @@ document.getElementById("captionResult").innerHTML =
 <div class="card">
 
 <h3>Optimized Caption</h3>
-<p>${data.optimized_caption}</p>
+
+<p id="mainCaption">${data.optimized_caption}</p>
+
+<button onclick="copyCaption()">Copy Caption</button>
+
+
+<h3>Caption Ideas</h3>
+
+<ul>
+
+<li>${data.optimized_caption}</li>
+
+<li>${data.optimized_caption.replace("!", " ✨")}</li>
+
+<li>${data.optimized_caption.replace(".", " 🔥")}</li>
+
+</ul>
 
 <h3>Viral Score</h3>
 <p>${data.viral_score}</p>
 
 <h3>Hooks</h3>
-<p>${data.hooks}</p>
+<ul>
+${data.hooks.split(",").map(h => `<li>${h}</li>`).join("")}
+</ul>
 
 <h3>Hashtags</h3>
-<p>${data.hashtags}</p>
+<p>${data.hashtags.split(",").join(" ")}</p>
 
 <h3>Reel Script</h3>
 
