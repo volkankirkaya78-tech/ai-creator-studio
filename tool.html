@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <title>Viral Studio AI</title>
 
@@ -123,11 +122,12 @@ margin-top:30px;
 <div class="menu">
 
 <div>Caption Generator</div>
-<div class="lock">🔒 Trend Detector</div>
-<div class="lock">🔒 Viral Ideas</div>
-<div class="lock">🔒 Content Calendar</div>
-<div class="lock">🔒 Reel Generator</div>
-<div class="lock">🔒 Competitor Analyzer</div>
+
+<div class="lock" onclick="upgrade()">🔒 Trend Detector</div>
+<div class="lock" onclick="upgrade()">🔒 Viral Ideas</div>
+<div class="lock" onclick="upgrade()">🔒 Content Calendar</div>
+<div class="lock" onclick="upgrade()">🔒 Reel Generator</div>
+<div class="lock" onclick="upgrade()">🔒 Competitor Analyzer</div>
 
 </div>
 
@@ -189,11 +189,11 @@ Generate Caption
 
 <div id="captionResult"></div>
 
-<div id="upgradeBox" style="display:none" class="upgradeBox">
+<div id="upgradeBox" class="upgradeBox">
 
-<h3>Your free trial is complete</h3>
+<h3>Upgrade to Pro</h3>
 
-<p>Upgrade to Pro to unlock:</p>
+<p>Unlock:</p>
 
 <ul>
 
@@ -206,13 +206,9 @@ Generate Caption
 
 </ul>
 
-<a href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384" target="_blank">
-
-<button class="upgrade">
+<button class="upgrade" onclick="upgrade()">
 Upgrade to Pro
 </button>
-
-</a>
 
 </div>
 
@@ -226,7 +222,25 @@ Upgrade to Pro
 
 const API="https://ai-caption-server-3rxf.onrender.com"
 
-let freeUsed=false
+function upgrade(){
+window.open(
+"https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384",
+"_blank"
+)
+}
+
+function canUseFree(){
+
+const today = new Date().toISOString().slice(0,10)
+const lastUse = localStorage.getItem("freeUseDate")
+
+if(lastUse===today){
+return false
+}
+
+localStorage.setItem("freeUseDate",today)
+return true
+}
 
 document.getElementById("image").addEventListener("change",function(){
 
@@ -267,27 +281,27 @@ const { data: { session } } = await supabaseClient.auth.getSession()
 if(!session){
 
 alert("Please login with Google")
-
 return
 
 }
 
-if(freeUsed){
+if(!canUseFree()){
 
 document.getElementById("upgradeBox").style.display="block"
 
-return
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+})
 
+return
 }
 
 const file=document.getElementById("image").files[0]
 
 if(!file){
-
 alert("Upload image")
-
 return
-
 }
 
 const reader=new FileReader()
@@ -367,8 +381,6 @@ ${data.hooks.map(h=>`<li>${h}</li>`).join("")}
 
 </div>
 `
-
-freeUsed=true
 
 }
 
