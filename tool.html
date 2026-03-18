@@ -181,7 +181,7 @@ async function loadUserPlan(email){
 const { data } = await supabaseClient
 .from("users")
 .select("plan")
-.eq("email", email.toLowerCase())
+.eq("email", email)
 
 currentPlan = data?.some(u => u.plan === "pro") ? "pro" : "free"
 
