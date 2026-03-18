@@ -228,7 +228,7 @@ async function loginWithGoogle(){
 await supabaseClient.auth.signInWithOAuth({
 provider:'google',
 options:{
-redirectTo: window.location.origin + "/tool.html"
+redirectTo: "https://ai-creator-studio-seven.vercel.app/tool.html"
 }
 })
 }
