@@ -180,20 +180,30 @@ window.open(
 
 /* ===== PLAN CHECK ===== */
 async function loadUserPlan(email){
+
+const normalizedEmail = email.trim().toLowerCase()
+
+console.log("LOGIN EMAIL:", normalizedEmail)
+
 const { data } = await supabaseClient
 .from("users")
-.select("plan")
-.eq("email", email.toLowerCase())
+.select("plan,email")
 
-currentPlan = data?.some(u => u.plan === "pro") ? "pro" : "free"
+console.log("DB DATA:", data)
+
+const match = data.find(
+u => u.email?.toLowerCase().trim() === normalizedEmail
+)
+
+currentPlan = match?.plan || "free"
 
 console.log("PLAN:", currentPlan)
 
 if(currentPlan === "pro"){
 unlockProUI()
 }
-}
 
+}
 /* ===== UNLOCK ===== */
 function unlockProUI(){
 document.querySelectorAll(".proFeature").forEach(el=>{
