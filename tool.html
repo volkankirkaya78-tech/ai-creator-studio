@@ -254,9 +254,13 @@ if(currentPlan === "pro"){
 /* ===== UNLOCK ===== */
 function unlockProUI(){
 document.querySelectorAll(".proFeature").forEach(el=>{
-el.classList.remove("lock")
-el.innerHTML = el.innerHTML.replace("🔒","")
+  el.classList.remove("lock")
+  el.innerHTML = el.innerHTML.replace("🔒","")
+
+  // 🔥 EN KRİTİK SATIR
+  el.onclick = null
 })
+
 document.getElementById("upgradeBox").style.display="none"
 }
 
