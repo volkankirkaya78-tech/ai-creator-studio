@@ -183,7 +183,7 @@ const { data } = await supabaseClient
 .select("plan")
 .eq("email", email.toLowerCase())
 
-currentPlan = data?.[0]?.plan || "free"
+currentPlan = data?.some(u => u.plan === "pro") ? "pro" : "free"
 
 console.log("PLAN:", currentPlan)
 
