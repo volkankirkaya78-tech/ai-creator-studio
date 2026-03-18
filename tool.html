@@ -228,22 +228,26 @@ const normalizedEmail = email.trim().toLowerCase()
 
 console.log("LOGIN EMAIL:", normalizedEmail)
 
-const { data } = await supabaseClient
-.from("users")
-.select("plan,email")
+const { data, error } = await supabaseClient
+  .from("users")
+  .select("plan")
+  .eq("email", normalizedEmail)
+  .single()
+
+if(error){
+  console.log("DB ERROR:", error)
+  currentPlan = "free"
+  return
+}
 
 console.log("DB DATA:", data)
 
-const match = data.find(
-u => u.email?.toLowerCase().trim() === normalizedEmail
-)
-
-currentPlan = match?.plan || "free"
+currentPlan = data?.plan || "free"
 
 console.log("PLAN:", currentPlan)
 
 if(currentPlan === "pro"){
-unlockProUI()
+  unlockProUI()
 }
 
 }
