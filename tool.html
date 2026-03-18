@@ -182,7 +182,6 @@ const { data } = await supabaseClient
 .from("users")
 .select("plan")
 .eq("email", email)
-.single()
 
 currentPlan = data?.plan || "free"
 
