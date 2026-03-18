@@ -10,7 +10,7 @@
 <script>
 // LOGIN CALLBACK FIX
 if (window.location.hash.includes("access_token")) {
-  window.location.href = "/tool.html";
+  history.replaceState(null, null, "/tool.html");
 }
 const { createClient } = supabase;
 
