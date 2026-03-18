@@ -8,6 +8,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+// LOGIN CALLBACK FIX
+if (window.location.hash.includes("access_token")) {
+  history.replaceState(null, null, window.location.pathname);
+}
 const { createClient } = supabase;
 
 const supabaseClient = createClient(
