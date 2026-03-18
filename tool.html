@@ -20,6 +20,49 @@ const supabaseClient = createClient(
 );
 
 let currentPlan = "free";
+
+async function initUser(){
+
+  // 🔥 SESSION BEKLE (çok kritik)
+  const { data: { session } } = await supabaseClient.auth.getSession()
+
+  if(!session){
+    console.log("❌ No session")
+    return
+  }
+
+  const user = session.user
+  const email = user.email
+
+  console.log("LOGIN EMAIL:", email)
+
+  const { data, error } = await supabaseClient
+    .from("users")
+    .select("plan")
+    .eq("email", email)
+    .single()
+
+  if(error){
+    console.log("DB ERROR:", error)
+    return
+  }
+
+  console.log("DB DATA:", data)
+
+  currentPlan = data?.plan || "free"
+
+  console.log("PLAN:", currentPlan)
+
+  if(currentPlan === "pro"){
+    unlockProUI()
+  }
+}
+
+
+// 🔥 SAYFA YÜKLENDİKTEN SONRA ÇALIŞTIR
+window.addEventListener("load", () => {
+  initUser()
+})
 </script>
 
 <style>
@@ -215,7 +258,8 @@ document.getElementById("upgradeBox").style.display="none"
 
 /* ===== FREE LIMIT ===== */
 function canUseFree(){
-if(currentPlan === "pro") return true
+  return currentPlan === "pro"
+}
 
 const today = new Date().toISOString().slice(0,10)
 const lastUse = localStorage.getItem("freeUseDate")
