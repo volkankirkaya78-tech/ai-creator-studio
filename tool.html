@@ -1,110 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+
 <meta charset="UTF-8">
-<title>Viral Studio AI</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-const { createClient } = supabase;
-
-const supabaseClient = createClient(
-"https://zfqgqpactijrdwvuocga.supabase.co",
-"sb_publishable_O_imKScPW4mB4zaKfjdBhg_hbdioqDR"
-);
-
-</script>
+<title>AI Creator Studio</title>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:#f5f7fb;
+background:#f4f6fb;
+text-align:center;
+padding:60px;
 }
 
-.container{
-display:flex;
-height:100vh;
-}
-
-.sidebar{
-width:240px;
-background:#1f2235;
-color:white;
-padding:30px;
-}
-
-.sidebar h2{
-margin-top:0;
-}
-
-.menu{
-margin-top:30px;
-}
-
-.menu div{
-padding:12px;
-border-radius:8px;
-cursor:pointer;
-margin-bottom:10px;
-}
-
-.menu div:hover{
-background:#2e3252;
-}
-
-.lock{
-opacity:0.6;
-}
-
-.main{
-flex:1;
-padding:50px;
-overflow:auto;
+.box{
+background:white;
+padding:40px;
+border-radius:12px;
+max-width:700px;
+margin:auto;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
 }
 
 button{
 background:#4f46e5;
 color:white;
 border:none;
-padding:12px 20px;
+padding:14px 28px;
 border-radius:8px;
+font-size:16px;
 cursor:pointer;
-margin-top:10px;
+margin-top:20px;
 }
 
-.google{
-background:#ea4335;
+.result{
+margin-top:30px;
+font-size:18px;
+line-height:1.6;
 }
 
 .upgrade{
-background:#7c3aed;
+margin-top:40px;
+display:none;
+background:#fafafa;
+padding:20px;
+border-radius:8px;
 }
 
-.card{
-background:white;
-padding:25px;
-border-radius:14px;
-margin-top:25px;
-box-shadow:0 10px 30px rgba(0,0,0,.05);
+.feedback{
+margin-top:50px;
+text-align:left;
 }
 
-.preview{
-max-width:350px;
-border-radius:12px;
-margin-bottom:10px;
-}
-
-.upgradeBox{
-background:#0f0f0f;
-color:white;
-padding:30px;
-border-radius:16px;
-margin-top:30px;
+textarea{
+width:100%;
+height:120px;
+padding:10px;
+border-radius:6px;
+border:1px solid #ddd;
 }
 
 </style>
@@ -113,183 +67,126 @@ margin-top:30px;
 
 <body>
 
-<div class="container">
+<div class="box">
 
-<div class="sidebar">
+<h1>AI Caption Generator</h1>
 
-<h2>Viral Studio</h2>
+<p>Upload a photo and generate viral captions instantly.</p>
 
-<div class="menu">
-
-<div>Caption Generator</div>
-
-<div class="lock" onclick="upgrade()">🔒 Trend Detector</div>
-<div class="lock" onclick="upgrade()">🔒 Viral Ideas</div>
-<div class="lock" onclick="upgrade()">🔒 Content Calendar</div>
-<div class="lock" onclick="upgrade()">🔒 Reel Generator</div>
-<div class="lock" onclick="upgrade()">🔒 Competitor Analyzer</div>
-
-</div>
-
-</div>
-
-<div class="main">
-
-<div id="loginBlock" class="card">
-
-<h3>Start Free Trial</h3>
-
-<p>Login with Google to generate viral captions.</p>
-
-<button class="google" onclick="loginWithGoogle()">
-Continue with Google
-</button>
-
-<br><br>
-
-<a href="demo.html">
-<button style="background:#111">See Demo</button>
-</a>
-
-</div>
-
-<div id="toolBlock" style="display:none">
-
-<h2>Caption Generator</h2>
-
-<img id="preview" class="preview">
+<input type="file" id="imageUpload">
 
 <br>
 
-<button onclick="document.getElementById('image').click()">
-Upload Image
-</button>
+<button onclick="generateCaption()">Generate Caption</button>
 
-<input type="file" id="image" style="display:none">
+<div class="result" id="result"></div>
 
-<br><br>
+<div class="upgrade" id="upgrade">
 
-<select id="style">
+<h3>Your free caption is ready 🎉</h3>
 
-<option value="viral">Viral</option>
-<option value="funny">Funny</option>
-<option value="emotional">Emotional</option>
-<option value="story">Story</option>
-<option value="luxury">Luxury</option>
+<p>Upgrade to Pro to unlock:</p>
 
-</select>
-
-<br><br>
-
-<button onclick="generateCaption()">
-Generate Caption
-</button>
-
-<div id="loading"></div>
-
-<div id="captionResult"></div>
-
-<div id="upgradeBox" class="upgradeBox">
-
-<h3>Upgrade to Pro</h3>
-
-<p>Unlock:</p>
-
-<ul>
-
+<ul style="text-align:left">
 <li>Unlimited captions</li>
 <li>Trend Detector</li>
 <li>Viral Ideas</li>
 <li>Content Calendar</li>
 <li>Reel Generator</li>
 <li>Competitor Analyzer</li>
-
 </ul>
 
-<button class="upgrade" onclick="upgrade()">
-Upgrade to Pro
-</button>
+<a href="https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384">
+<button>Upgrade to Pro – $12/month</button>
+</a>
+
+</div>
+
+<div class="feedback">
+
+<hr>
+
+<h3>Send Feedback</h3>
+
+<p>Help us improve the tool.</p>
+
+<textarea id="feedbackText" placeholder="Write your feedback here"></textarea>
+
+<br>
+
+<button onclick="sendFeedback()">Send Feedback</button>
+
+<p id="feedbackMessage"></p>
 
 </div>
 
 </div>
 
-</div>
-
-</div>
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
 
-const API="https://ai-caption-server-3rxf.onrender.com"
+/* =========================
+SUPABASE INIT
+========================= */
 
-function upgrade(){
-window.open(
-"https://ai-creator-studio.lemonsqueezy.com/checkout/buy/eba7f826-a7ae-4527-a2d7-3fb7e6237384",
-"_blank"
+const supabase = window.supabase.createClient(
+  "https://zfqgqpactijrdwvuocga.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcWdxcGFjdGlqcmR3dnVvY2dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MTY3MTIsImV4cCI6MjA4OTA5MjcxMn0.M1wmpW6SBjWbJ2B3Rg5kCkA4jeKtlmx3S_-AI-b5ybA"
 )
+
+let currentPlan = "free"
+
+/* =========================
+CHECK USER PLAN
+========================= */
+
+async function checkUserPlan() {
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return
+
+  const { data } = await supabase
+    .from("users")
+    .select("plan")
+    .eq("email", user.email)
+    .single()
+
+  currentPlan = data?.plan || "free"
+
+  console.log("PLAN:", currentPlan)
 }
 
-function canUseFree(){
+/* =========================
+API
+========================= */
+
+const API_URL = "https://ai-caption-server-3rxf.onrender.com/caption"
 
 const today = new Date().toISOString().slice(0,10)
-const lastUse = localStorage.getItem("freeUseDate")
 
-if(lastUse===today){
-return false
+let usage = JSON.parse(localStorage.getItem("usage")) || {
+date:today,
+count:0
 }
 
-localStorage.setItem("freeUseDate",today)
-return true
+if(usage.date !== today){
+usage.date = today
+usage.count = 0
+localStorage.setItem("usage", JSON.stringify(usage))
 }
 
-document.getElementById("image").addEventListener("change",function(){
-
-const file=this.files[0]
-
-if(!file) return
-
-const reader=new FileReader()
-
-reader.onload=function(e){
-
-document.getElementById("preview").src=e.target.result
-
-}
-
-reader.readAsDataURL(file)
-
-})
-
-async function loginWithGoogle(){
-
-await supabaseClient.auth.signInWithOAuth({
-
-provider:'google',
-
-options:{
-redirectTo: window.location.origin + "/tool.html"
-}
-
-})
-
-}
+/* =========================
+GENERATE CAPTION
+========================= */
 
 async function generateCaption(){
 
-const { data: { session } } = await supabaseClient.auth.getSession()
+// 🔥 PRO ise limitsiz
+if(currentPlan !== "pro" && usage.count >= 1){
 
-if(!session){
-
-alert("Please login with Google")
-return
-
-}
-
-if(!canUseFree()){
-
-alert("Your free caption for today is used. Upgrade to Pro for unlimited captions.")
-
-document.getElementById("upgradeBox").style.display="block"
+document.getElementById("upgrade").style.display="block"
 
 window.scrollTo({
 top:document.body.scrollHeight,
@@ -297,92 +194,47 @@ behavior:"smooth"
 })
 
 return
+
 }
 
-const file=document.getElementById("image").files[0]
+const file = document.getElementById("imageUpload").files[0]
 
 if(!file){
-alert("Upload image")
+alert("Upload image first")
 return
 }
 
-const reader=new FileReader()
+const reader = new FileReader()
 
-document.getElementById("loading").innerHTML="Analyzing image..."
+reader.onloadend = async function(){
 
-setTimeout(()=>{
-document.getElementById("loading").innerHTML="Generating captions..."
-},1200)
+const image = reader.result
 
-setTimeout(()=>{
-document.getElementById("loading").innerHTML="Calculating viral score..."
-},2400)
+document.getElementById("result").innerHTML = "Generating caption..."
 
-reader.onload=async function(e){
-
-const res=await fetch(API+"/caption",{
-
+const response = await fetch(API_URL,{
 method:"POST",
-
 headers:{
 "Content-Type":"application/json"
 },
-
 body:JSON.stringify({
-
-image:e.target.result,
-style:document.getElementById("style").value
-
+image:image,
+style:"viral"
+})
 })
 
-})
+const data = await response.json()
 
-const data=await res.json()
+document.getElementById("result").innerHTML =
+"<b>Optimized Caption</b><br><br>" + data.optimized_caption
 
-document.getElementById("loading").innerText=""
+// 🔥 sadece free user sayılır
+if(currentPlan !== "pro"){
+usage.count++
+localStorage.setItem("usage", JSON.stringify(usage))
+}
 
-document.getElementById("captionResult").innerHTML =
-
-`
-<div class="card">
-
-<h3>Optimized Caption</h3>
-
-<p id="mainCaption">${data.optimized_caption}</p>
-
-<button onclick="copyCaption()">Copy Caption</button>
-
-<h3>Caption Ideas</h3>
-
-<ul>
-
-<li>${data.captions[0]}</li>
-<li>${data.captions[1]}</li>
-<li>${data.captions[2]}</li>
-<li>${data.captions[3]}</li>
-<li>${data.captions[4]}</li>
-
-</ul>
-
-<h3>Viral Score</h3>
-<p>${data.viral_score}/10</p>
-
-<h3>Hooks</h3>
-<ul>
-${data.hooks.map(h=>`<li>${h}</li>`).join("")}
-</ul>
-
-<h3>Hashtags</h3>
-<p>${data.hashtags.join(" ")}</p>
-
-<h3>Reel Script</h3>
-
-<p><b>Hook:</b> ${data.reel_script.hook}</p>
-<p><b>Scene:</b> ${data.reel_script.scene}</p>
-<p><b>Voiceover:</b> ${data.reel_script.voiceover}</p>
-
-</div>
-`
+document.getElementById("upgrade").style.display="block"
 
 }
 
@@ -390,28 +242,21 @@ reader.readAsDataURL(file)
 
 }
 
-function copyCaption(){
+/* =========================
+FEEDBACK
+========================= */
 
-const text=document.getElementById("mainCaption").innerText
-
-navigator.clipboard.writeText(text)
-
-alert("Caption copied")
-
+function sendFeedback(){
+document.getElementById("feedbackMessage").innerHTML =
+"Thank you for your feedback!"
 }
 
-window.onload = async function(){
+/* =========================
+ON LOAD
+========================= */
 
-const { data: { session } } =
-await supabaseClient.auth.getSession()
-
-if(session){
-
-document.getElementById("loginBlock").style.display="none"
-document.getElementById("toolBlock").style.display="block"
-
-}
-
+window.onload = () => {
+  checkUserPlan()
 }
 
 </script>
